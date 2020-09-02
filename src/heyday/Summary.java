@@ -7,6 +7,7 @@ package heyday;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -15,17 +16,40 @@ import java.util.Date;
  */
 public class Summary {
 
-    double newsoldAmount = 0.00;
-    double newSubtotal = 0.0;
-    double newsdDiscount = 0.00;
-    double newvcDiscount = 0.00;
-    double productTotalAmount = 0.00;
+    private static ArrayList<Summary> totalOrders = new ArrayList<>();
+    private Receipt orders = new Receipt();
+    private double newsoldAmount = 0.00;
+    private double newSubtotal = 0.0;
+    private double newsdDiscount = 0.00;
+    private double newvcDiscount = 0.00;
+    private double productTotalAmount = 0.00;
     DateFormat dateFormat = new SimpleDateFormat("E,  dd MMM yyyy");
     Date date = new Date();
 
     public Summary() {
     }
 
+    public Summary(Receipt orders) {
+        this.orders = orders;
+        totalOrders.add(this);
+    }
+
+    public static ArrayList<Summary> getTotalOrders() {
+        return totalOrders;
+    }
+
+    public static void setTotalOrders(ArrayList<Summary> totalOrders) {
+        Summary.totalOrders = totalOrders;
+    }
+
+    public Receipt getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Receipt orders) {
+        this.orders = orders;
+    }
+    
     public DateFormat getDateFormat() {
         return dateFormat;
     }
@@ -37,9 +61,9 @@ public class Summary {
     public int calculateTotalOrder(int totalOrder) {
         return totalOrder++;
     }
-    
+
     public double calculateSoldAmount(int sold, double amount) {
-    	newsoldAmount = sold * amount;
+        newsoldAmount = sold * amount;
         return newsoldAmount;
     }
 
@@ -49,7 +73,7 @@ public class Summary {
     }
 
     public double calculateDiscount(double sdDiscount) {
-        
+
         newsdDiscount += sdDiscount;
         return newsdDiscount;
     }
@@ -59,9 +83,14 @@ public class Summary {
         return newvcDiscount;
     }
 
-    public double calculateFinalTotalAmount(double totalAmount,double totalDiscount,double totalVoucher) {
-    	productTotalAmount = totalAmount - totalDiscount - totalVoucher;
-        return  productTotalAmount;
+    public double calculateFinalTotalAmount(double totalAmount, double totalDiscount, double totalVoucher) {
+        productTotalAmount = totalAmount - totalDiscount - totalVoucher;
+        return productTotalAmount;
     }
 
+    @Override
+    public String toString() {
+        return "Summary{" + "orders=" + orders + ", newsoldAmount=" + newsoldAmount + ", newSubtotal=" + newSubtotal + ", newsdDiscount=" + newsdDiscount + ", newvcDiscount=" + newvcDiscount + ", productTotalAmount=" + productTotalAmount + ", dateFormat=" + dateFormat + ", date=" + date + '}';
+    }
+    
 }
