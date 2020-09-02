@@ -5,54 +5,60 @@
  */
 package heyday;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Xin Ying
  */
 public class Order {
 
-    private String orderProductID;
+    private ArrayList<Order> orderedDetails = new ArrayList<>();
+    private Product orderedProd = new Product();
     private int orderQty;
 
     public Order() {
-        this.orderProductID = "";
-        this.orderQty = 0;
     }
 
-    public Order(String orderProductID, int orderQty) {
-        this.orderProductID = orderProductID;
+    public Order(Product orderedProd, int orderQty) {
+        this.orderedProd = orderedProd;
         this.orderQty = orderQty;
+        orderedDetails.add(this);
     }
 
-    public void setOrderProductID(String orderProductID) {
-        this.orderProductID = orderProductID;
+    public ArrayList<Order> getOrderedDetails() {
+        return orderedDetails;
+    }
+
+    public void setOrderedDetails(ArrayList<Order> orderedDetails) {
+        this.orderedDetails = orderedDetails;
     }
 
     public void setOrderQty(int orderQty) {
         this.orderQty = orderQty;
     }
 
-    public String getOrderProductID() {
-        return orderProductID;
-    }
-
     public int getOrderQty() {
         return orderQty;
     }
 
-    public double calculateAmount(Product[] product, int newProd) {
-        double orderAmount = 0;
+    public Product getOrderedProd() {
+        return orderedProd;
+    }
 
-        for (int i = 0; i < product.length - newProd; i++) {
-            if (orderProductID.equalsIgnoreCase(product[i].getId())) {
-                orderAmount = product[i].getPrice()*orderQty;
-            }
-        }
+    public void setOrderedProd(Product orderedProd) {
+        this.orderedProd = orderedProd;
+    }
+
+    public double calculateAmount(Product product) {
+        double orderAmount = 0;
+        orderAmount = product.getPrice() * orderQty;
         return orderAmount;
     }
 
+    @Override
     public String toString() {
-        return "\nProduct ID: " + orderProductID + "\nOrder Quantity: " + orderQty + "\n";
+        return "\nOrdered Product: " + orderedProd.toString() + "\nOrdered Quantity: " + orderQty;
     }
 
 }

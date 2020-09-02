@@ -16,34 +16,49 @@ import java.util.Date;
  */
 public class Receipt {
 
-    SpecialDeals specialdeals = new SpecialDeals();
-    VoucherDiscount voucherdiscount = new VoucherDiscount();
+    private static ArrayList<Receipt> orders = new ArrayList<>();
+    private ArrayList<Order> orderedItems = new ArrayList<>();
+    private Discount discount = new Discount();
     DateFormat dateFormat = new SimpleDateFormat("E,  dd MMM yyyy");
     DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss aa");
     Date date = new Date();
     Date time = new Date();
     private final static double TAX_RATE = 0.06;
     private static int orderID = 0;
+    private double subtotal = 0.00;
 
-//    Discount discount = new Discount();
+//    private static ArrayList<Order> order= new ArrayList<>();
     public Receipt() {
+    }
+
+    public Receipt(ArrayList<Order> orderedItems) {
+        this.orderedItems = orderedItems;
+        orders.add(this);
         orderID++;
     }
 
-    public SpecialDeals getSpecialdeals() {
-        return specialdeals;
+    public static ArrayList<Receipt> getOrders() {
+        return orders;
     }
 
-    public void setSpecialdeals(SpecialDeals specialdeals) {
-        this.specialdeals = specialdeals;
+    public static void setOrders(ArrayList<Receipt> orders) {
+        Receipt.orders = orders;
     }
 
-    public VoucherDiscount getVoucherdiscount() {
-        return voucherdiscount;
+    public ArrayList<Order> getOrderedItems() {
+        return orderedItems;
     }
 
-    public void setVoucherdiscount(VoucherDiscount voucherdiscount) {
-        this.voucherdiscount = voucherdiscount;
+    public void setOrderedItems(ArrayList<Order> orderedItems) {
+        this.orderedItems = orderedItems;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
     }
 
     public DateFormat getDateFormat() {
@@ -70,11 +85,8 @@ public class Receipt {
         return TAX_RATE;
     }
 
-    public double calculateSubtotal(ArrayList<Double> amountToPay) {
-        double subtotal = 0.00;
-        for (double i : amountToPay) {
-            subtotal += i;
-        }
+    public double calculateSubtotal(double amountToPay) {
+        subtotal += amountToPay;
         return subtotal;
     }
 
@@ -98,7 +110,7 @@ public class Receipt {
 
     @Override
     public String toString() {
-        return "\nSpecial Deals: \n" + specialdeals.toString() + "Voucherdiscount: \n" + voucherdiscount.toString() + "\nDateFormat: " + dateFormat + "\nTimeFormat:" + timeFormat + "\nDate:" + date + "\nTime: " + time;
+        return "\nDateFormat: " + dateFormat + "\nTimeFormat:" + timeFormat + "\nDate:" + date + "\nTime: " + time;
     }
 
 }
