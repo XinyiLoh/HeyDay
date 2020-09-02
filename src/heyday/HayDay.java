@@ -240,6 +240,7 @@ public class HayDay {
 
         ArrayList<Integer> orderedProductQty = new ArrayList<>();
         ArrayList<Double> orderedProductAmount = new ArrayList<>();
+        ArrayList<String> orderedProductId = new ArrayList<>();
 
         Scanner scan = new Scanner(System.in);
 
@@ -749,20 +750,23 @@ public class HayDay {
 //                            for (int i : orderedProdQty) {
 //                                
 //                            }
-                            for (int i = 0; i < orderedProdAmount.size(); i++) {
-                                orderedProductQty.add(orderedProdQty.get(i));
-                                orderedProductAmount.add(orderedProdAmount.get(i));
-                            }
 
-                            //Arrays are cleared before continue another order
-                            orderedProdId.clear();
-                            orderedProdName.clear();
-                            orderedProdQty.clear();
-                            orderedUnitPrice.clear();
-                            orderedProdAmount.clear();
+
+
                         } else {
                             System.out.println("\nOrdered successfully !\n");
                         }
+                        for (int i = 0; i < orderedProdAmount.size(); i++) {
+                            orderedProductQty.add(orderedProdQty.get(i));
+                            orderedProductAmount.add(orderedProdAmount.get(i));
+                            orderedProductId.add(orderedProdId.get(i));
+                        }
+                        //Arrays are cleared before continue another order
+                        orderedProdId.clear();
+                        orderedProdName.clear();
+                        orderedProdQty.clear();
+                        orderedUnitPrice.clear();
+                        orderedProdAmount.clear();
                     } else if (continuePayment == 'n' || continuePayment == 'N') {
                         System.out.println("\nOrder is cancelled...\n");
                         cancelOrder = true;
@@ -1016,23 +1020,28 @@ public class HayDay {
                     totalVoucher = summary.calculateVoucher(vcDiscount);
                     grandFinalTotalAmount = summary.calculateFinalTotalAmount(totalAmount, totalDiscounts, totalVoucher);
 
-                    System.out.printf("%61s", "SUMMARY");
-                    System.out.printf("%61s", "\n-------");
-                    System.out.printf("%-15s", "Total Order : " + totalOrder + "%55s", "Date" + summary.getDate());
-                    System.out.println("\n=============================================================================");
-                    System.out.println("Product ID          Products            Sold                 Amount");
-                    for (int i = 0; i < product.length - newProd; i++) {
+                    System.out.printf("%45s", "SUMMARY\n");
+                    System.out.printf("%44s", "-------");
+                    System.out.printf("%-15s%61s", "\nTotal Order : " + totalOrder , "Date : " + summary.getDate());
+                    System.out.println("\n============================================================================");
+                    System.out.println("Product ID             Products                Sold                   Amount");
+                    for (int i = 0; i < product.length - newProd; i++) { // Loop 15 times
+                        soldTotalAmount = 0;
+                        int soldTotalQty = 0;
                         for (int j = 0; j < orderedProductQty.size(); j++) {
-                            soldTotalAmount = summary.calculateSoldAmount(orderedProductQty.get(j), product[i].getPrice());
-                            System.out.printf("%s               %-20s%-20d %-20.2f\n", product[i].getId(), product[i].getName(), orderedProductQty.get(j), soldTotalAmount);
+                            if(orderedProductId.get(j).equals(product[i].getId())) {
+                                soldTotalAmount += summary.calculateSoldAmount(orderedProductQty.get(j), product[i].getPrice());
+                                soldTotalQty += orderedProductQty.get(j);
+                            }
                         }
+                        System.out.printf("%-23s%-25s%-22d %-22.2f\n", product[i].getId(), product[i].getName(), soldTotalQty, soldTotalAmount);
                     }
                     ;
-                    System.out.println("=============================================================================");
-                    System.out.printf("Total Amount $%65.2f\n", totalAmount);
-                    System.out.printf("Total Discount $%63.2f\n", totalDiscounts);
-                    System.out.printf("Total Voucher Amount $%57.2f\n", totalVoucher);
-                    System.out.printf("Final Total Amount $%59.2f\n", grandFinalTotalAmount);
+                    System.out.println("============================================================================");
+                    System.out.printf("Total Amount %62.2f\n", totalAmount);
+                    System.out.printf("Total Discount %60.2f\n", totalDiscounts);
+                    System.out.printf("Total Voucher Amount %54.2f\n", totalVoucher);
+                    System.out.printf("Final Total Amount %56.2f\n", grandFinalTotalAmount);
                     break;
                 case 6:
                     System.out.println("\n===========================");
