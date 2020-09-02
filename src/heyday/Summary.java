@@ -15,7 +15,11 @@ import java.util.Date;
  */
 public class Summary {
 
+    double newsoldAmount = 0.00;
     double newSubtotal = 0.0;
+    double newsdDiscount = 0.00;
+    double newvcDiscount = 0.00;
+    double productTotalAmount = 0.00;
     DateFormat dateFormat = new SimpleDateFormat("E,  dd MMM yyyy");
     Date date = new Date();
 
@@ -35,9 +39,8 @@ public class Summary {
     }
     
     public double calculateSoldAmount(int sold, double amount) {
-    	double soldAmount;
-        soldAmount = sold * amount;
-        return soldAmount;
+    	newsoldAmount = sold * amount;
+        return newsoldAmount;
     }
 
     public double calculateAmount(double subtotal) {
@@ -46,20 +49,19 @@ public class Summary {
     }
 
     public double calculateDiscount(double sdDiscount) {
-        double specialDealDiscount = 0.00;
-        specialDealDiscount += sdDiscount;
-        return specialDealDiscount;
+        
+        newsdDiscount += sdDiscount;
+        return newsdDiscount;
     }
 
     public double calculateVoucher(double vcDiscount) {
-        double voucherDiscount = 0.00;
-        voucherDiscount += vcDiscount;
-        return voucherDiscount;
+        newvcDiscount += vcDiscount;
+        return newvcDiscount;
     }
 
     public double calculateFinalTotalAmount(double totalAmount,double totalDiscount,double totalVoucher) {
-    	double productTotalAmount;
-        return  productTotalAmount = totalAmount - totalDiscount - totalVoucher;
+    	productTotalAmount = totalAmount - totalDiscount - totalVoucher;
+        return  productTotalAmount;
     }
 
 }
