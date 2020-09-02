@@ -214,7 +214,7 @@ public class HayDay {
         //number of new categoriy and product can be added
         int newCat = 2;
         int newProd = 5;
-        
+
         //--Receipt--//
         double subtotal = 0.00;
         double amountPaid;
@@ -240,8 +240,6 @@ public class HayDay {
 
         ArrayList<Integer> orderedProductQty = new ArrayList<>();
         ArrayList<Double> orderedProductAmount = new ArrayList<>();
-//        int orderedProductQty = 0;
-//        double orderedProductAmount = 0.0;
 
         Scanner scan = new Scanner(System.in);
 
@@ -478,9 +476,6 @@ public class HayDay {
                     if (continuePayment == 'Y' || continuePayment == 'y') {
                         Receipt receipt = new Receipt();
 
-                        VoucherDiscount voucher = new VoucherDiscount(20110, 10110);
-                        SpecialDeals specialpromo = new SpecialDeals();
-
                         int[] vcCode10 = new int[8];
                         int[] vcCode20 = new int[8];
                         String[] entireCode10 = new String[8];
@@ -494,6 +489,11 @@ public class HayDay {
                         boolean freeItems = false;
                         boolean flowerOrchardPurchased = false;
 
+                        subtotal = receipt.calculateSubtotal(orderedProdAmount);
+
+                        VoucherDiscount voucher = new VoucherDiscount(20110, 10110, subtotal);
+                        SpecialDeals specialpromo = new SpecialDeals(subtotal);
+
                         for (int i = 0; i < vcCode10.length; i++) {
                             vcCode10[i] = voucher.getVcCodeTen();
                             entireCode10[i] = "HDVC" + vcCode10[i];
@@ -502,10 +502,6 @@ public class HayDay {
                         for (int i = 0; i < vcCode20.length; i++) {
                             vcCode20[i] = voucher.getVcCodeTwenty();
                             entireCode20[i] = "HDVC" + vcCode20[i];
-                        }
-
-                        for (int i = 0; i < orderedProdAmount.size(); i++) {
-                            subtotal += orderedProdAmount.get(i);     //calculate subtotal
                         }
 
                         //----------------- Special Promotions ----------------- 
@@ -560,7 +556,7 @@ public class HayDay {
                             }
                         }
 
-                        sdDiscount = specialpromo.calculateDiscount(subtotal, cowSheepPurchased, flowerOrchardPurchased);               //Discount is calculated
+                        sdDiscount = specialpromo.calculateDiscount(cowSheepPurchased, flowerOrchardPurchased);               //Discount is calculated
 
                         do {
                             do {
@@ -757,7 +753,6 @@ public class HayDay {
                                 orderedProductQty.add(orderedProdQty.get(i));
                                 orderedProductAmount.add(orderedProdAmount.get(i));
                             }
-                            
 
                             //Arrays are cleared before continue another order
                             orderedProdId.clear();
@@ -1029,9 +1024,10 @@ public class HayDay {
                     for (int i = 0; i < product.length - newProd; i++) {
                         for (int j = 0; j < orderedProductQty.size(); j++) {
                             soldTotalAmount = summary.calculateSoldAmount(orderedProductQty.get(j), product[i].getPrice());
-                            System.out.printf("%s               %-20s%-20d %-20.2f", product[i].getId(), product[i].getName(), orderedProductQty.get(j), soldTotalAmount);
+                            System.out.printf("%s               %-20s%-20d %-20.2f\n", product[i].getId(), product[i].getName(), orderedProductQty.get(j), soldTotalAmount);
                         }
-                    };
+                    }
+                    ;
                     System.out.println("=============================================================================");
                     System.out.printf("Total Amount $%65.2f\n", totalAmount);
                     System.out.printf("Total Discount $%63.2f\n", totalDiscounts);

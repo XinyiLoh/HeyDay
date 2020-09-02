@@ -9,24 +9,24 @@ package heyday;
  *
  * @author HP
  */
-public class VoucherDiscount extends Discount {
+public class VoucherDiscount {
 
     private static final double VOUCHER_TWENTY = 20;
     private static final double VOUCHER_TEN = 10;
     private int vcCodeTwenty;
     private int vcCodeTen;
+    private double originalPrice;
 
     public VoucherDiscount() {
+        this.vcCodeTwenty = 0;
+        this.vcCodeTen = 0;
+        this.originalPrice = 0.00;
     }
 
-    public VoucherDiscount(int vcCodeTwenty, int vcCodeTen) {
+    public VoucherDiscount(int vcCodeTwenty, int vcCodeTen, double originalPrice) {
         this.vcCodeTwenty = vcCodeTwenty;
         this.vcCodeTen = vcCodeTen;
-    }
-
-    @Override
-    public double getDiscount() {
-        return discount;
+        this.originalPrice = originalPrice;
     }
 
     public int getVcCodeTwenty() {
@@ -47,17 +47,28 @@ public class VoucherDiscount extends Discount {
         return VOUCHER_TEN;
     }
 
+    public double getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(double originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+    
     public double calculateDiscount(int vcCode) {
+        double discount = 0;
+
         if (vcCode <= 10999) {
             discount = VOUCHER_TEN;
         } else if (vcCode > 20000) {
             discount = VOUCHER_TWENTY;
         }
+
         return discount;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "Twenty Ringgit Voucher Code: " + vcCodeTwenty + "Ten Ringgit Voucher Code: " + vcCodeTen;
+        return "\nTwenty Dollars Voucher Code: " + vcCodeTwenty + "\nTen Dollars Voucher Code: " + vcCodeTen + "\nOriginal Price: " + originalPrice;
     }
 }

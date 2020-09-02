@@ -9,17 +9,18 @@ package heyday;
  *
  * @author HP
  */
-public class SpecialDeals extends Discount {
+public class SpecialDeals {
 
     private static final double DISCOUNT_TEN = 0.1;
     private static final double DISCOUNT_FIVE = 0.05;
+    private double orginalPrice;
 
     public SpecialDeals() {
+        this.orginalPrice = 0.00;
     }
 
-    @Override
-    public double getDiscount() {
-        return discount;
+    public SpecialDeals(double orginalPrice) {
+        this.orginalPrice = orginalPrice;
     }
 
     public static double getDISCOUNT_TEN() {
@@ -30,11 +31,21 @@ public class SpecialDeals extends Discount {
         return DISCOUNT_FIVE;
     }
 
-    public double calculateDiscount(double subtotal, boolean discountTen, boolean discountFive) {
+    public double getOrginalPrice() {
+        return orginalPrice;
+    }
+
+    public void setOrginalPrice(double orginalPrice) {
+        this.orginalPrice = orginalPrice;
+    }
+
+    public double calculateDiscount(boolean discountTen, boolean discountFive) {
+        double discount;
+
         if (discountTen) {
-            discount = DISCOUNT_TEN * subtotal;
+            discount = DISCOUNT_TEN * orginalPrice;
         } else if (discountFive) {
-            discount = DISCOUNT_FIVE * subtotal;
+            discount = DISCOUNT_FIVE * orginalPrice;
         } else {
             discount = 0;
         }
@@ -43,9 +54,8 @@ public class SpecialDeals extends Discount {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "\nOrginalPrice: " + orginalPrice;
     }
-
 }
 
 /*

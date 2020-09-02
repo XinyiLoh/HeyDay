@@ -7,6 +7,7 @@ package heyday;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -15,23 +16,34 @@ import java.util.Date;
  */
 public class Receipt {
 
-    private Discount discount;
-
-    private final static double TAX_RATE = 0.06;
-    private static int orderID = 0;
-
+    SpecialDeals specialdeals = new SpecialDeals();
+    VoucherDiscount voucherdiscount = new VoucherDiscount();
     DateFormat dateFormat = new SimpleDateFormat("E,  dd MMM yyyy");
     DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss aa");
     Date date = new Date();
     Date time = new Date();
+    private final static double TAX_RATE = 0.06;
+    private static int orderID = 0;
 
 //    Discount discount = new Discount();
     public Receipt() {
         orderID++;
     }
 
-    public Receipt(Discount discount) {
-        this.discount = discount;
+    public SpecialDeals getSpecialdeals() {
+        return specialdeals;
+    }
+
+    public void setSpecialdeals(SpecialDeals specialdeals) {
+        this.specialdeals = specialdeals;
+    }
+
+    public VoucherDiscount getVoucherdiscount() {
+        return voucherdiscount;
+    }
+
+    public void setVoucherdiscount(VoucherDiscount voucherdiscount) {
+        this.voucherdiscount = voucherdiscount;
     }
 
     public DateFormat getDateFormat() {
@@ -58,12 +70,12 @@ public class Receipt {
         return TAX_RATE;
     }
 
-    public Discount getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
+    public double calculateSubtotal(ArrayList<Double> amountToPay) {
+        double subtotal = 0.00;
+        for (double i : amountToPay) {
+            subtotal += i;
+        }
+        return subtotal;
     }
 
     public double calculateTax(double subtotal) {
@@ -86,7 +98,7 @@ public class Receipt {
 
     @Override
     public String toString() {
-        return discount.toString() + "\nDateFormat: " + dateFormat + "TimeFormat: " + timeFormat + "Date: " + date + "Time: " + time;
+        return "\nSpecial Deals: \n" + specialdeals.toString() + "Voucherdiscount: \n" + voucherdiscount.toString() + "\nDateFormat: " + dateFormat + "\nTimeFormat:" + timeFormat + "\nDate:" + date + "\nTime: " + time;
     }
 
 }
