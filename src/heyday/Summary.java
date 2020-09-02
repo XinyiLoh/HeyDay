@@ -36,7 +36,8 @@ public class Summary {
     
     public double calculateSoldAmount(int sold, double amount) {
     	double soldAmount;
-        return soldAmount = sold * amount;
+        soldAmount = sold * amount;
+        return soldAmount;
     }
 
     public double calculateAmount(double subtotal) {
@@ -45,15 +46,15 @@ public class Summary {
     }
 
     public double calculateDiscount(double sdDiscount) {
-        return sdDiscount += sdDiscount;
+        double specialDealDiscount = 0.00;
+        specialDealDiscount += sdDiscount;
+        return specialDealDiscount;
     }
 
     public double calculateVoucher(double vcDiscount) {
-        return vcDiscount += vcDiscount;
-    }
-
-    public double calculateTaxAmount(double taxCharge) {
-        return taxCharge += taxCharge;
+        double voucherDiscount = 0.00;
+        voucherDiscount += vcDiscount;
+        return voucherDiscount;
     }
 
     public double calculateFinalTotalAmount(double totalAmount,double totalDiscount,double totalVoucher) {
