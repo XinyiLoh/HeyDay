@@ -7,7 +7,6 @@ package heyday;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -16,8 +15,6 @@ import java.util.Date;
  */
 public class Summary {
 
-    private static ArrayList<Summary> totalOrders = new ArrayList<>();
-    private Receipt orders = new Receipt();
     private double newsoldAmount = 0.00;
     private double newSubtotal = 0.0;
     private double newsdDiscount = 0.00;
@@ -29,27 +26,6 @@ public class Summary {
     public Summary() {
     }
 
-    public Summary(Receipt orders) {
-        this.orders = orders;
-        totalOrders.add(this);
-    }
-
-    public static ArrayList<Summary> getTotalOrders() {
-        return totalOrders;
-    }
-
-    public static void setTotalOrders(ArrayList<Summary> totalOrders) {
-        Summary.totalOrders = totalOrders;
-    }
-
-    public Receipt getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Receipt orders) {
-        this.orders = orders;
-    }
-    
     public DateFormat getDateFormat() {
         return dateFormat;
     }
@@ -58,10 +34,50 @@ public class Summary {
         return dateFormat.format(date);
     }
 
-    public int calculateTotalOrder(int totalOrder) {
-        return totalOrder++;
+    public double getNewsoldAmount() {
+        return newsoldAmount;
     }
 
+    public void setNewsoldAmount(double newsoldAmount) {
+        this.newsoldAmount = newsoldAmount;
+    }
+
+    public double getNewSubtotal() {
+        return newSubtotal;
+    }
+
+    public void setNewSubtotal(double newSubtotal) {
+        this.newSubtotal = newSubtotal;
+    }
+
+    public double getNewsdDiscount() {
+        return newsdDiscount;
+    }
+
+    public void setNewsdDiscount(double newsdDiscount) {
+        this.newsdDiscount = newsdDiscount;
+    }
+
+    public double getNewvcDiscount() {
+        return newvcDiscount;
+    }
+
+    public void setNewvcDiscount(double newvcDiscount) {
+        this.newvcDiscount = newvcDiscount;
+    }
+
+    public double getProductTotalAmount() {
+        return productTotalAmount;
+    }
+
+    public void setProductTotalAmount(double productTotalAmount) {
+        this.productTotalAmount = productTotalAmount;
+    }
+    
+//    public int calculateTotalOrder(int totalOrder) {
+//        return totalOrder++;
+//    }
+//
     public double calculateSoldAmount(int sold, double amount) {
         newsoldAmount = sold * amount;
         return newsoldAmount;
@@ -90,7 +106,7 @@ public class Summary {
 
     @Override
     public String toString() {
-        return "Summary{" + "orders=" + orders + ", newsoldAmount=" + newsoldAmount + ", newSubtotal=" + newSubtotal + ", newsdDiscount=" + newsdDiscount + ", newvcDiscount=" + newvcDiscount + ", productTotalAmount=" + productTotalAmount + ", dateFormat=" + dateFormat + ", date=" + date + '}';
+        return "NewsoldAmount=" + newsoldAmount + ", newSubtotal=" + newSubtotal + ", newsdDiscount=" + newsdDiscount + ", newvcDiscount=" + newvcDiscount + ", productTotalAmount=" + productTotalAmount + ", dateFormat=" + dateFormat + ", date=" + date;
     }
     
 }

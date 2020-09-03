@@ -7,6 +7,7 @@ package heyday;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 /**
  *
@@ -93,7 +94,7 @@ public class Heyday {
                         }
                     }
                     if (count == 0) {
-                        System.out.println("\nNo record found.");
+                        System.err.println("\nNo record found.");
                     } else {
                         System.out.println("\n" + count + " Product(s)");
                     }
@@ -102,7 +103,7 @@ public class Heyday {
             System.out.println("=================================================================================");
         } else {
             if (selectCat > cat.length) {
-                System.out.println("Invalid input...");
+                System.err.println("Invalid input...");
             } else {
                 System.out.println("Quit...");
             }
@@ -114,17 +115,17 @@ public class Heyday {
         int error = 0;
 
         if (title.length() <= 2 || title.length() > 15) {
-            System.out.println("\"" + title + "\"" + " Title length is out of range.");
+            System.err.println("\"" + title + "\"" + " Title length is out of range.");
             error++;
         }
 
         for (int i = 0; i < cat.length - newCat; i++) {
             if (cat[i].getCode() == Character.toUpperCase(code)) {
-                System.out.println("\"" + code + "\"" + " Code is repeated.");
+                System.err.println("\"" + code + "\"" + " Code is repeated.");
                 error++;
             }
             if (cat[i].getName().equalsIgnoreCase(title)) {
-                System.out.println("\"" + title + "\"" + " Category exist.");
+                System.err.println("\"" + title + "\"" + " Category exist.");
                 error++;
             }
         }
@@ -155,17 +156,17 @@ public class Heyday {
 
         //check id fromat
         if (cat.getCode() != idFLetter || id.length() != 4 || digit != 3) {
-            System.out.println("\"" + id + "\"" + " ID is in wrong format.");
-            System.out.println("\tExample of Correct ID Format: Category Code + Sequence Numbers ->" + cat.getCode() + "001");
+            System.err.println("\"" + id + "\"" + " ID is in wrong format.");
+            System.err.println("\tExample of Correct ID Format: Category Code + Sequence Numbers ->" + cat.getCode() + "001");
             error++;
         }
 
         //check name format
         if (letter != name.length()) {
-            System.out.println("\"" + name + "\"" + " Name should only contains letters.");
+            System.err.println("\"" + name + "\"" + " Name should only contains letters.");
             error++;
         } else if (name.length() <= 2 || name.length() > 15) {
-            System.out.println("\"" + name + "\"" + " Name length is out of range.");
+            System.err.println("\"" + name + "\"" + " Name length is out of range.");
             error++;
         }
 
@@ -173,35 +174,59 @@ public class Heyday {
         for (int i = 0; i < product.length - newProd; i++) {
 
             if (product[i].getId().equalsIgnoreCase(id)) {
-                System.out.println("\"" + id + "\"" + " Duplicate ID.");
+                System.err.println("\"" + id + "\"" + " Duplicate ID.");
                 error++;
             }
 
             if (product[i].getName().equalsIgnoreCase(name)) {
-                System.out.println("\"" + name + "\"" + " Duplicate Name.");
+                System.err.println("\"" + name + "\"" + " Duplicate Name.");
                 error++;
             }
         }
 
         //check detail length
         if (detail.length() <= 2 || detail.length() > 20) {
-            System.out.println("\"" + detail + "\"" + " Detail length is out of range.");
+            System.err.println("\"" + detail + "\"" + " Detail length is out of range.");
             error++;
         }
 
         //check price
         if (price <= 0.0 || price >= 9999.99) {
-            System.out.println("\"" + price + "\"" + " Price is out of range.");
+            System.err.println("\"" + price + "\"" + " Price is out of range.");
             error++;
         }
 
         //check stock
         if (stock <= 0 || stock >= 9999) {
-            System.out.println("\"" + stock + "\"" + " Stock is out of range.");
+            System.err.println("\"" + stock + "\"" + " Stock is out of range.");
             error++;
         }
 
         return error;
+    }
+
+    /*----- Receipt -----*/
+    public static double calculateSubtotal(double subtotal, double amountToPay) {
+        subtotal += amountToPay;
+        return subtotal;
+    }
+
+    public static double calculateTax(double subtotal, double tax_rate) {
+        double taxCharge;
+        taxCharge = tax_rate * subtotal;
+        return taxCharge;
+    }
+
+    public static double calculateTotal(double subtotal, double taxCharge, double totalDiscount) {
+        double total;
+        total = subtotal + taxCharge - totalDiscount;
+        return total;
+    }
+
+    public static double calculateBalance(double payment, double total) {
+        double balance;
+        balance = payment - total;
+        return balance;
     }
 
     public static void main(String[] args) {
@@ -210,33 +235,24 @@ public class Heyday {
         Category[] cat = heyDayCategory();
         Product[] product = heyDayProduct(cat);
         ArrayList<String> usedVc = new ArrayList<>();
-        ArrayList<Order> orderedItem = new ArrayList<>();
+        ArrayList<Order> orders = new ArrayList<>();
+        ArrayList<Order> tempItem = new ArrayList<>();
 
         //number of new categoriy and product can be added
         int newCat = 2;
         int newProd = 5;
 
         //--Receipt--//
-        double subtotal = 0.00;
-        double amountPaid;
+        double subtotal;
+        double amountPaid = 0;
         double total;
         double taxCharge;
-        double balance;
+        double balance = 0;
         double vcDiscount = 0;
         double sdDiscount = 0;
         double totalDiscount;
-        char printReceipt;
-        int retypeChoice;
-        char method;
 
         //--Summary--//
-        int totalOrder;
-        int summaryOrderID;
-        double soldTotalAmount;
-        double totalAmount;
-        double totalDiscounts;
-        double totalVoucher;
-        double grandFinalTotalAmount;
         Summary summary = new Summary();
 
         Scanner scan = new Scanner(System.in);
@@ -279,11 +295,11 @@ public class Heyday {
                 login = true;
             } else {
                 if (correctUsername == false) {
-                    System.out.println("                          Wrong username. Please try again.");
+                    System.err.println("                          Wrong username. Please try again.");
                 } else if (correctPassword == false) {
-                    System.out.println("                          Wrong password. Please try again.");
+                    System.err.println("                          Wrong password. Please try again.");
                 } else {
-                    System.out.println("                          Wrong username and password. Please try again.");
+                    System.err.println("                          Wrong username and password. Please try again.");
                 }
             }
 
@@ -306,28 +322,32 @@ public class Heyday {
 
                 System.out.println("0. Logout");
                 System.out.print("Enter choice > ");
-                selection = scan.nextInt();
-
-                if (staff[staffNo] instanceof Manager) {
-                    if (selection < 0 || selection > 6) {
-                        System.out.println("\nInvalid choice, please try again");
-                        menu = false;
+                try {
+                    selection = scan.nextInt();
+                    if (staff[staffNo] instanceof Manager) {
+                        if (selection < 0 || selection > 6) {
+                            System.err.println("\nInvalid choice, please try again");
+                            menu = false;
+                        } else {
+                            menu = true;
+                        }
                     } else {
-                        menu = true;
+                        if (selection < 0 || selection > 2) {
+                            System.err.println("\nInvalid choice, please try again");
+                            menu = false;
+                        } else {
+                            menu = true;
+                        }
                     }
-                } else {
-                    if (selection < 0 || selection > 2) {
-                        System.out.println("\nInvalid choice, please try again");
-                        menu = false;
-                    } else {
-                        menu = true;
-                    }
+                } catch (InputMismatchException a) {
+                    System.err.println("Must enter a number");
+                    scan.next();
                 }
             }
 
-            char out;
             switch (selection) {
                 case 0:
+                    char out;
                     do {
                         System.out.print("\nAre you sure want to logout? (Y / N) > ");
                         out = scan.next().charAt(0);
@@ -357,7 +377,13 @@ public class Heyday {
                         System.out.println("Total Products = " + Product.getTotalProduct());
                         System.out.println("=========================");
                         System.out.print("Enter choice > ");
-                        selectCat = scan.nextInt();
+
+                        try {
+                            selectCat = scan.nextInt();
+                        } catch (InputMismatchException a) {
+                            System.err.println("Must enter a number");
+                            scan.next();
+                        }
                         displayProducts(selectCat, cat, product, newProd);
                     } while (selectCat != 0);
                     break;
@@ -368,7 +394,7 @@ public class Heyday {
                     System.out.println("===========================");
 
                     String orderProductID;
-                    int orderQty;
+                    int orderQty = 0;
                     int orderStockQty = 0;
                     int orderError = 0;
                     int orderFound = 0;
@@ -376,21 +402,11 @@ public class Heyday {
                     char continueAddOrder;
                     char continuePayment;
                     double prodAmount = 0;
+                    boolean cancelOrder = false;
+                    Order addOrder = new Order();
 
                     int index = 0;
 
-                    boolean cancelOrder = false;
-
-                    Order addOrder = new Order();
-
-//                    Order takeOrder = new Order();
-//                    Order takeOrder = new Order();
-//                    ArrayList<String> orderedProdId = new ArrayList<>();
-//                    ArrayList<String> orderedProdName = new ArrayList<>();
-//                    ArrayList<Integer> orderedProdQty = new ArrayList<>();
-//                    ArrayList<Double> orderedUnitPrice = new ArrayList<>();
-//                    ArrayList<Double> orderedProdAmount = new ArrayList<>();
-//                     ArrayList<Order> orderedItemDetails = new ArrayList<>();
                     do {
                         orderError = 0;
                         orderFound = 0;
@@ -398,7 +414,6 @@ public class Heyday {
 
                             orderError = 0;
                             orderFound = 0;
-                            //Enter Product ID
                             System.out.print("\nEnter Product ID > ");
                             orderProductID = scan.next();
 
@@ -419,7 +434,7 @@ public class Heyday {
                             }
                             if (orderFound == 0) {
                                 if (orderError == 0) {
-                                    System.out.println("No record found, please try again");
+                                    System.err.println("No record found, please try again");
 
                                 }
                             }
@@ -429,26 +444,31 @@ public class Heyday {
                             //Enter Unit
                             do {
                                 System.out.print("\nEnter unit > ");
-                                orderQty = scan.nextInt();
-                                if (orderQty == 0) {
-                                    System.err.println("Unit cannot be zero, please try again");
+                                try {
+                                    orderQty = scan.nextInt();
+
+                                    if (orderQty == 0) {
+                                        System.err.println("Unit cannot be zero, please try again");
+                                    }
+                                } catch (InputMismatchException a) {
+                                    System.err.println("Must enter a number");
+                                    scan.next();
                                 }
                             } while (orderQty == 0);
+
                             for (int i = 0; i < product.length - newProd; i++) {
-                                if (orderQty <= product[i].getStock()) {
-                                    orderStockQty++;
+                                if (orderProductID.equalsIgnoreCase(product[i].getId())) {
+                                    if (orderQty <= product[i].getStock()) {
+                                        orderStockQty++;
+                                    }
                                 }
                             }
                             //Out of Stock
                             if (orderStockQty == 0) {
-                                System.out.println("Sorry, out of stock..");
+                                System.err.println("Sorry, out of stock..");
                             } else {
-
                                 for (int i = 0; i < product.length - newProd; i++) {
-
                                     if (orderProductID.equalsIgnoreCase(product[i].getId())) {
-
-//                                        Order orderedDetails = new Order(product[i], orderQty);
                                         Order takeOrder = new Order(product[i], orderQty);
                                         System.out.println("\nProduct ID : " + takeOrder.getOrderedProd().getId()
                                                 + "\nProduct : " + takeOrder.getOrderedProd().getName()
@@ -456,16 +476,14 @@ public class Heyday {
                                         System.out.printf("Amount : $%.2f\n", takeOrder.calculateAmount(product[i]));
                                         prodAmount += takeOrder.calculateAmount(product[i]);
                                         addOrder = takeOrder;
+                                        tempItem.add(index, takeOrder);
+                                        index++;
                                         System.out.println("--------------------------------------------------------------------------------\n");
                                         orderStockFound++;
                                     }
                                 }
                             }
                         } while (orderStockQty == 0);
-
-                        orderedItem.add(index, addOrder);
-                        System.out.println(orderedItem);
-                        index++;
 
                         do {
                             System.out.print("\n Continue Add Order (Y / N) > ");
@@ -485,11 +503,20 @@ public class Heyday {
                     } while (continuePayment != 'n' && continuePayment != 'N' && continuePayment != 'y' && continuePayment != 'Y');
 
                     //------------- Receipt -------------
-                    if (continuePayment == 'Y' || continuePayment == 'y') {
+                    if (continuePayment == 'n' || continuePayment == 'N') {
+                        System.err.println("\nOrder is cancelled...\n");
+                        cancelOrder = true;
+                        tempItem.clear();
+                    } else if (continuePayment == 'Y' || continuePayment == 'y') {
+                        Receipt receipt = new Receipt();
 
-                        index = 0;
-
-                        Receipt receipt = new Receipt(orderedItem);
+                        ArrayList<Order> orderedItem = new ArrayList<>(tempItem);
+                        tempItem.clear();
+                        Order.setOrderedDetails(orderedItem);
+                        for (int i = 0; i < orderedItem.size(); i++) {
+                            orders.add(orderedItem.get(i));
+                        }
+                        Receipt.setTotalOrder(orders);
 
                         Discount voucherTen1 = new Discount("HDVC10111", 10);
                         Discount voucherTen2 = new Discount("HDVC10112", 10);
@@ -503,17 +530,24 @@ public class Heyday {
                         Discount specialDeals = new Discount();
 
                         int vcCount = 0;
+                        char printReceipt;
+                        char inputAnother;
+                        char retypeChoice;
+                        char method;
 
                         boolean inputAgain = false;
                         boolean invalidCode = true;
-                        boolean successVc = false;
+                        boolean used;
 
                         boolean specialdeals = false;
                         boolean cowSheepPurchased = false;
                         boolean freeItems = false;
                         boolean flowerOrchardPurchased = false;
 
-                        subtotal = receipt.calculateSubtotal(prodAmount);
+                        subtotal = calculateSubtotal(receipt.getSubtotal(), prodAmount);
+
+                        //For Summary 
+                        summary.calculateAmount(subtotal);
 
                         //----------------- Special Promotions ----------------- 
                         //Cow+Sheep = 10% discount
@@ -575,88 +609,101 @@ public class Heyday {
                             sdDiscount = 0;
                         }
 
-                        if (vcCount == 0 && subtotal > 50.00 && specialdeals == false) {                             //If voucher hasn't been used before & total amount exceeds $50, customer is allowed to receive voucher discount
-                            do {
-                                System.out.print(" Any voucher (Y / N) > ");
-                                method = scan.next().charAt(0);
-                                if (method != 'N' && method != 'n' && method != 'Y' && method != 'y') {
-                                    System.err.println("Invalid input, please try again");
-                                }
-                            } while (method != 'N' && method != 'n' && method != 'Y' && method != 'y');
-                            switch (method) {
-                                case 'Y':
-                                case 'y':
-                                    //----------------- Voucher Discount ----------------- 
+                        if (subtotal > 50.00 && !specialdeals) {
+
+                            if (vcCount == 0) {
+                                do {
+                                    System.out.print(" Any voucher (Y / N) > ");
+                                    method = scan.next().charAt(0);
+                                    if (method != 'N' && method != 'n' && method != 'Y' && method != 'y') {
+                                        System.err.println("Invalid input, please try again");
+                                    }
+                                } while (method != 'N' && method != 'n' && method != 'Y' && method != 'y');
+
+                                if (method == 'y' || method == 'Y') {
                                     do {
-                                        boolean used = false;
-                                        System.out.print("\n Please enter voucher code: ");
-                                        String inputVc = scan.next().toUpperCase();
-                                        for (int i = 0; i < Discount.getVoucher().size(); i++) {
-                                            if (inputVc.equals(Discount.getVoucher().get(i).getCode())) {
-                                                for (int j = 0; j < usedVc.size(); j++) {
-                                                    if (usedVc.get(j).equals(inputVc)) {   //Comparing the used voucher with the found code
-                                                        System.err.println(" Discount implemented failed, this voucher has already been used.");
-                                                        used = true;
-                                                        do {
-                                                            System.out.print("1 - Input another voucher code, 2 - Proceed to Payment without Voucher > ");
-                                                            retypeChoice = scan.nextInt();
-                                                            switch (retypeChoice) {
-                                                                case 1:
-                                                                    inputAgain = true;
-                                                                    break;
-                                                                case 2:
-                                                                    inputAgain = false;
-                                                                    break;
-                                                                default:
-                                                                    System.out.println("Invalid input, please try again");
-                                                            }
-                                                        } while (retypeChoice != 1 && retypeChoice != 2);
+                                        used = false;
+                                        if (vcCount == 0) {
+                                            System.out.print("\n Please enter voucher code: ");
+                                            String inputVc = scan.next().toUpperCase();
+                                            for (int i = 0; i < Discount.getVoucher().size(); i++) {
+                                                if (inputVc.equals(Discount.getVoucher().get(i).getCode())) {
+                                                    for (int m = 0; m < usedVc.size(); m++) {
+                                                        if (usedVc.get(m).equals(Discount.getVoucher().get(i).getCode())) {
+                                                            System.err.println(" Discount implemented failed, this voucher has already been used.");
+                                                            used = true;
+                                                            do {
+                                                                System.out.print("Input another voucher code (Y / N) > ");
+                                                                inputAnother = scan.next().charAt(0);
+                                                                scan.nextLine();
+                                                                switch (inputAnother) {
+                                                                    case 'y':
+                                                                    case 'Y':
+                                                                        inputAgain = true;
+                                                                        break;
+                                                                    case 'n':
+                                                                    case 'N':
+                                                                        inputAgain = false;
+                                                                        break;
+                                                                    default:
+                                                                        System.err.println("Invalid input, please try again");
+                                                                }
+                                                            } while (inputAnother != 'n' && inputAnother != 'N' && inputAnother != 'y' && inputAnother != 'Y');
+                                                        }
                                                     }
+                                                    if (!used) {
+                                                        vcCount++;
+                                                        System.out.printf("\n $%.2f Discount is implemented successfully...\n", Discount.getVoucher().get(i).getAmount());
+                                                        vcDiscount = Discount.getVoucher().get(i).getAmount();
+                                                        usedVc.add(Discount.getVoucher().get(i).getCode());
+                                                        inputAgain = false;
+                                                    }
+                                                    invalidCode = false;
+                                                    break;
                                                 }
-                                                if (used == false) {
-                                                    System.out.printf("\n $%.2f Discount is implemented successfully...\n", Discount.getVoucher().get(i).getAmount());
-                                                    vcCount++;
-                                                    vcDiscount = Discount.getVoucher().get(i).getAmount();
-                                                    successVc = true;
-                                                    inputAgain = false;                                //exit loop
-                                                    usedVc.add(Discount.getVoucher().get(i).getCode());
-                                                }
-                                                invalidCode = false;
+                                            }
+
+                                            if (invalidCode) {
+                                                System.err.println("Invalid voucher code");
+                                                System.out.print("Re-type voucher code (Y / N) > ");
+                                                retypeChoice = scan.next().charAt(0);
+                                                scan.nextLine();
+                                                do {
+                                                    switch (retypeChoice) {
+                                                        case 'y':
+                                                        case 'Y':
+                                                            inputAgain = true;
+                                                            break;
+                                                        case 'n':
+                                                        case 'N':
+                                                            inputAgain = false;
+                                                            break;
+                                                        default:
+                                                            System.err.println("Invalid input, please try again");
+                                                    }
+                                                } while (retypeChoice != 'n' && retypeChoice != 'N' && retypeChoice != 'y' && retypeChoice != 'Y');
                                             }
                                         }
-
-                                        if (invalidCode) {
-                                            System.err.println("Invalid voucher code");
-                                            do {
-                                                System.out.print("1 - Re-type voucher code, 2 - Proceed to Payment without Voucher  > ");
-                                                retypeChoice = scan.nextInt();
-                                                switch (retypeChoice) {
-                                                    case 1:
-                                                        inputAgain = true;
-                                                        break;
-                                                    case 2:
-                                                        inputAgain = false;
-                                                        break;
-                                                    default:
-                                                        System.err.println("Invalid input, please try again");
-                                                }
-                                            } while (retypeChoice != 1 && retypeChoice != 2);
-                                        }
-                                    } while (inputAgain == true);
+                                    } while (inputAgain);
+                                }
                             }
                         }
 
                         if (sdDiscount > 0) {
                             totalDiscount = sdDiscount;
+                            //For Summary
+                            summary.calculateDiscount(sdDiscount);
                         } else if (vcDiscount > 0) {
                             totalDiscount = vcDiscount;
+                            //For Summary
+                            summary.calculateVoucher(vcDiscount);
                         } else {
                             totalDiscount = 0;
                         }
 
                         //Information are shown before input amount paid by the customers
-                        taxCharge = receipt.calculateTax(subtotal);
-                        total = receipt.calculateTotal(subtotal, taxCharge, totalDiscount);
+                        taxCharge = calculateTax(subtotal, Receipt.getTAX_RATE());
+                        total = calculateTotal(subtotal, taxCharge, totalDiscount);
 
                         System.out.printf("\n Subtotal: \t\t$%9.2f\n", subtotal);
                         if (vcCount > 0) {
@@ -667,22 +714,37 @@ public class Heyday {
                         System.out.printf(" Extra Charges (Tax): \t$%9.2f\n", taxCharge);
                         System.out.printf(" Total: \t\t$%9.2f\n", total);
                         do {
-                            System.out.print(" Amount Paid: \t\t$  ");
-                            amountPaid = scan.nextDouble();
-                            balance = receipt.calculateBalance(amountPaid, total);
-                            if (amountPaid >= total) {
-                                System.out.printf(" Change: \t\t$%9.2f\n", balance);
-                            } else {
-                                System.err.println("Not enough payment, please try again.");
+
+                            try {
+                                System.out.print(" Amount Paid: \t\t$  ");
+                                amountPaid = scan.nextDouble();
+                                balance = calculateBalance(amountPaid, total);
+                                if (amountPaid >= total) {
+                                    System.out.printf(" Change: \t\t$%9.2f\n", balance);
+                                } else {
+                                    System.err.println("Not enough payment, please try again.");
+                                }
+                            } catch (InputMismatchException a) {
+                                System.err.println("\nMust enter a number");
+                                scan.next();
                             }
                         } while (amountPaid < total);
 
+                        for (int i = 0; i < orderedItem.size(); i++) {
+                            for (int j = 0; j < product.length - newProd; j++) {
+                                if (orderedItem.get(i).getOrderedProd().getId().equals(product[j].getId())) {
+                                    product[j].decreaseStock(orderedItem.get(i).getOrderQty());
+                                }
+                            }
+                        }
+
+                        System.out.println("\nOrdered successfully !\n");
                         //print receipt
                         do {
                             System.out.print("\nPrint receipt (Y / N) > ");                         //Prompt to print receipt
                             printReceipt = scan.next().charAt(0);
                             if (printReceipt != 'y' && printReceipt != 'Y' && printReceipt != 'n' && printReceipt != 'N') {
-                                System.out.println("Invalid input, please try again");
+                                System.err.println("Invalid input, please try again");
                             }
                         } while (printReceipt != 'y' && printReceipt != 'Y' && printReceipt != 'n' && printReceipt != 'N');
                         if (printReceipt == 'y' || printReceipt == 'Y') {
@@ -725,14 +787,8 @@ public class Heyday {
                                     + "\n\t\t\t         Please come back soon. "
                                     + "\n\n\t\t\t             Have a nice day!\n");
                             System.out.println("----------------------------------------------------------------------------------------");
-                            summary.setOrders(receipt);
-                            orderedItem.clear();
-                        } else {
-                            System.out.println("\nOrdered successfully !\n");
                         }
-                    } else if (continuePayment == 'n' || continuePayment == 'N') {
-                        System.out.println("\nOrder is cancelled...\n");
-                        cancelOrder = true;
+                        orderedItem.clear();
                     }
                     break;
 
@@ -744,6 +800,8 @@ public class Heyday {
                     int addnew = 0;
 
                     do {
+                        /*---------------------------------------------------------------------------------------------------------------- not resolved yet ------------------------------------*/
+
                         System.out.println("\n1. New Category");
                         System.out.println("2. New Product");
                         System.out.println("3. Quit");
@@ -764,7 +822,7 @@ public class Heyday {
                                         newCat--;
                                     }
                                 } else {
-                                    System.out.println("Exceeded the limit of adding new categories.");
+                                    System.err.println("Exceeded the limit of adding new categories.");
                                 }
                                 break;
 
@@ -802,17 +860,17 @@ public class Heyday {
                                         }
 
                                     } catch (Exception e) {
-                                        System.out.println("Something went wrong...");
+                                        System.err.println("Something went wrong...");
                                     }
 
                                 } else {
-                                    System.out.println("Exceeded the limit of adding new products.");
+                                    System.err.println("Exceeded the limit of adding new products.");
                                 }
                             case 3:
                                 System.out.println("Quit...");
                                 break;
                             default:
-                                System.out.println("Invalid Input...");
+                                System.err.println("Invalid Input...");
                         }
                     } while (addnew >= 1 && addnew <= 2);
                     break;
@@ -857,7 +915,7 @@ public class Heyday {
                                                 }
                                             }
                                             if (count <= 0) {
-                                                System.out.printf("No product found!");
+                                                System.err.printf("No product found!");
                                             }
                                             System.out.println("===========================================");
                                             break;
@@ -886,7 +944,7 @@ public class Heyday {
                                                 System.out.println("===========================================");
 
                                             } else {
-                                                System.out.println("Invalid input");
+                                                System.err.println("Invalid input");
                                             }
                                             break;
 
@@ -913,7 +971,7 @@ public class Heyday {
                                             System.out.println("Quit..");
                                             break;
                                         default:
-                                            System.out.println("Invalid input..");
+                                            System.err.println("Invalid input..");
                                     }
                                 } while (chkStock >= 1 && chkStock <= 3);
                                 break;
@@ -947,7 +1005,7 @@ public class Heyday {
                                     }
 
                                     if (found == 0) {
-                                        System.out.println("Product ID not found...");
+                                        System.err.println("Product ID not found...");
                                         System.out.print("Continue finding ? [1 = YES]: ");
                                         int yes = scan.nextInt();
                                         scan.nextLine();
@@ -962,35 +1020,34 @@ public class Heyday {
                                 System.out.println("Quit..");
                                 break;
                             default:
-                                System.out.println("Invalid input...");
+                                System.err.println("Invalid input...");
                         }
                     } while (stockControl >= 1 && stockControl <= 3);
                     break;
 
                 case 5:
 
-                    summaryOrderID = Receipt.getOrderID();
-                    totalOrder = summary.calculateTotalOrder(summaryOrderID);
-                    totalAmount = summary.calculateAmount(subtotal);
-                    totalDiscounts = summary.calculateDiscount(sdDiscount);
-                    totalVoucher = summary.calculateVoucher(vcDiscount);
-                    grandFinalTotalAmount = summary.calculateFinalTotalAmount(totalAmount, totalDiscounts, totalVoucher);
+                    double soldTotalAmount;
+                    double grandFinalTotalAmount;
+                    grandFinalTotalAmount = summary.calculateFinalTotalAmount(summary.getNewSubtotal(), summary.getNewsdDiscount(), summary.getNewvcDiscount());
 
-                    System.out.println("\t\t\t\t   SUMMARY");
-                    System.out.println("\t\t\t\t   -------\n");
-                    System.out.printf("Total Order : %-15d \nDate: %15s", totalOrder, summary.getDate());
-                    System.out.println("\n=============================================================================");
-                    System.out.println("Product ID          Products            Sold                 Amount");
-                    for (int i = 0; i < Summary.getTotalOrders().size(); i++) {
-                        for (int j = 0; j < Summary.getTotalOrders().get(i).getOrders().getOrderedItems().size(); j++) {
-                            soldTotalAmount = summary.calculateSoldAmount(Summary.getTotalOrders().get(i).getOrders().getOrderedItems().get(j).getOrderQty(), product[i].getPrice());
-                            System.out.printf("%s               %-20s%-20d %-20.2f\n", product[i].getId(), product[i].getName(), Summary.getTotalOrders().get(i).getOrders().getOrderedItems().get(j).getOrderQty(), soldTotalAmount);
-                        }
+                    System.out.println("\t\t\t\t   DAILY SUMMARY");
+                    System.out.println("\t\t\t\t   -------------\n");
+                    System.out.printf("Total Order : %-15d \t\t\t\tDate: %15s", Receipt.getOrderID(), summary.getDate());
+                    System.out.println("\n===============================================================================");
+                    System.out.print("Product ID\t\tProducts\t\tSold\t\t\tAmount");
+                    System.out.println("\n===============================================================================");
+                    for (int i = 0; i < Receipt.getTotalOrder().size(); i++) {
+                        soldTotalAmount = 0;
+                        int soldTotalQty = 0;
+                        soldTotalAmount += summary.calculateSoldAmount(Receipt.getTotalOrder().get(i).getOrderQty(), Receipt.getTotalOrder().get(i).getOrderedProd().getPrice());
+                        soldTotalQty += Receipt.getTotalOrder().get(i).getOrderQty();
+                        System.out.printf("%-23s%4s%25d \t%22.2f\n", Receipt.getTotalOrder().get(i).getOrderedProd().getId(), Receipt.getTotalOrder().get(i).getOrderedProd().getName(), soldTotalQty, soldTotalAmount);
                     }
-                    System.out.println("=============================================================================");
-                    System.out.printf("Total Amount $%65.2f\n", totalAmount);
-                    System.out.printf("Total Discount $%63.2f\n", totalDiscounts);
-                    System.out.printf("Total Voucher Amount $%57.2f\n", totalVoucher);
+                    System.out.println("===============================================================================");
+                    System.out.printf("Total Amount $%65.2f\n", summary.getNewSubtotal());
+                    System.out.printf("Total Discount $%63.2f\n", summary.getNewsdDiscount());
+                    System.out.printf("Total Voucher Amount $%57.2f\n", summary.getNewvcDiscount());
                     System.out.printf("Final Total Amount $%59.2f\n", grandFinalTotalAmount);
                     break;
 

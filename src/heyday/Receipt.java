@@ -16,41 +16,29 @@ import java.util.Date;
  */
 public class Receipt {
 
-    private static ArrayList<Receipt> orders = new ArrayList<>();
-    private ArrayList<Order> orderedItems = new ArrayList<>();
+    private static ArrayList<Order> totalOrder = new ArrayList<>();
     private Discount discount = new Discount();
-    DateFormat dateFormat = new SimpleDateFormat("E,  dd MMM yyyy");
-    DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss aa");
-    Date date = new Date();
-    Date time = new Date();
+    private DateFormat dateFormat = new SimpleDateFormat("E,  dd MMM yyyy");
+    private DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss aa");
+    private Date date = new Date();
+    private Date time = new Date();
     private final static double TAX_RATE = 0.06;
     private static int orderID = 0;
     private double subtotal = 0.00;
+    private double tax = 0.00;
+    private double total = 0.00;
+    private double balance = 0.00;
 
-//    private static ArrayList<Order> order= new ArrayList<>();
     public Receipt() {
-    }
-
-    public Receipt(ArrayList<Order> orderedItems) {
-        this.orderedItems = orderedItems;
-        orders.add(this);
         orderID++;
     }
 
-    public static ArrayList<Receipt> getOrders() {
-        return orders;
+    public static ArrayList<Order> getTotalOrder() {
+        return totalOrder;
     }
 
-    public static void setOrders(ArrayList<Receipt> orders) {
-        Receipt.orders = orders;
-    }
-
-    public ArrayList<Order> getOrderedItems() {
-        return orderedItems;
-    }
-
-    public void setOrderedItems(ArrayList<Order> orderedItems) {
-        this.orderedItems = orderedItems;
+    public static void setTotalOrder(ArrayList<Order> totalOrder) {
+        Receipt.totalOrder=totalOrder;
     }
 
     public Discount getDiscount() {
@@ -85,32 +73,41 @@ public class Receipt {
         return TAX_RATE;
     }
 
-    public double calculateSubtotal(double amountToPay) {
-        subtotal += amountToPay;
+    public double getSubtotal() {
         return subtotal;
     }
 
-    public double calculateTax(double subtotal) {
-        double taxCharge;
-        taxCharge = TAX_RATE * subtotal;
-        return taxCharge;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 
-    public double calculateTotal(double subtotal, double taxCharge, double totalDiscount) {
-        double total;
-        total = subtotal + taxCharge - totalDiscount;
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getTotal() {
         return total;
     }
 
-    public double calculateBalance(double payment, double total) {
-        double balance;
-        balance = payment - total;
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     @Override
     public String toString() {
         return "\nDateFormat: " + dateFormat + "\nTimeFormat:" + timeFormat + "\nDate:" + date + "\nTime: " + time;
     }
-
+    
 }

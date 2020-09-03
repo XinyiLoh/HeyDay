@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author HP
+ * @author Koh Hui Hui
  */
 public class Discount {
 
@@ -66,3 +66,9 @@ public class Discount {
     }
 
 }
+
+/*
+    Cow+Sheep = 10% discount
+    Product from Dairy and Field > $100 = 3 pounds of apples and 2 pounds of grapes
+    Product from Flower and Orchard > $100 = 5% discount
+ */

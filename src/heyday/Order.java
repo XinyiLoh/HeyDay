@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Order {
 
-    private ArrayList<Order> orderedDetails = new ArrayList<>();
+    private static ArrayList<Order> orderedDetails = new ArrayList<>();
     private Product orderedProd = new Product();
     private int orderQty;
 
@@ -26,13 +26,14 @@ public class Order {
         orderedDetails.add(this);
     }
 
-    public ArrayList<Order> getOrderedDetails() {
+    public static ArrayList<Order> getOrderedDetails() {
         return orderedDetails;
     }
 
-    public void setOrderedDetails(ArrayList<Order> orderedDetails) {
-        this.orderedDetails = orderedDetails;
+    public static void setOrderedDetails(ArrayList<Order> orderedDetails) {
+        Order.orderedDetails = orderedDetails;
     }
+
 
     public void setOrderQty(int orderQty) {
         this.orderQty = orderQty;
