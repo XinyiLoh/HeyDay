@@ -107,7 +107,7 @@ public class Receipt {
 
     @Override
     public String toString() {
-        return "\nDateFormat: " + dateFormat + "\nTimeFormat:" + timeFormat + "\nDate:" + date + "\nTime: " + time;
+        return "\nDiscount: " + discount + "\nDateFormat: " + dateFormat + "\nTimeFormat: " + timeFormat + "\nDate: " + date + "\nTime: " + time + "\nSubtotal: " + subtotal + "\nTax: " + tax + "\nTotal: " + total + "\nBalance: " + balance;
     }
     
 }
