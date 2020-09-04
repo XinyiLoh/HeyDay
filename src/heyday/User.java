@@ -15,7 +15,7 @@ public class User {
     protected char gender;
     protected String phoneNo;
 
-    public User(String username, String password, char gender, String phoneNo) {
+    protected User(String username, String password, char gender, String phoneNo) {
         this.username = username;
         this.password = password;
         this.gender = gender;

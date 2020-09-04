@@ -20,7 +20,6 @@ public class Product {
     private static int totalProduct;
 
     public Product() {
-        this.name = "";
     }
 
     public Product(Category source, String id, String name, double price, String detail, int stock) {

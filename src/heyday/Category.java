@@ -15,7 +15,6 @@ public class Category {
     private String name;
     
     public Category(){
-        this.name = "";
     }
     
     public Category(char code,String name){
