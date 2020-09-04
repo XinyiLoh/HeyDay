@@ -378,6 +378,7 @@ public class Heyday {
             System.err.println("\nOrder is cancelled...\n");
             tempItem.clear();
         } else if (continuePayment == 'Y' || continuePayment == 'y') {
+
             Receipt receipt = new Receipt();
 
             ArrayList<Order> orderedItem = new ArrayList<>(tempItem);
@@ -414,7 +415,8 @@ public class Heyday {
             boolean freeItems = false;
             boolean flowerOrchardPurchased = false;
 
-            subtotal = calculateSubtotal(receipt.getSubtotal(), prodAmount);
+            receipt.setSubtotal(prodAmount);
+            subtotal = receipt.getSubtotal();
 
             //For Summary 
             summary.calculateAmount(subtotal);
@@ -572,8 +574,8 @@ public class Heyday {
             }
 
             //Information are shown before input amount paid by the customers
-            taxCharge = calculateTax(subtotal, Receipt.getTAX_RATE());
-            total = calculateTotal(subtotal, taxCharge, totalDiscount);
+            taxCharge = receipt.calculateTax();
+            total = receipt.calculateTotal(taxCharge, totalDiscount);
 
             System.out.printf("\n Subtotal: \t\t$%9.2f\n", subtotal);
             if (vcCount > 0) {
@@ -588,7 +590,7 @@ public class Heyday {
                 try {
                     System.out.print(" Amount Paid: \t\t$  ");
                     amountPaid = scan.nextDouble();
-                    balance = calculateBalance(amountPaid, total);
+                    balance = receipt.calculateBalance(amountPaid, total);
                     if (amountPaid >= total) {
                         System.out.printf(" Change: \t\t$%9.2f\n", balance);
                     } else {
@@ -1014,30 +1016,6 @@ public class Heyday {
         System.out.printf("Total Discount %60.2f\n", summary.getNewsdDiscount());
         System.out.printf("Total Voucher Amount %54.2f\n", summary.getNewvcDiscount());
         System.out.printf("Final Total Amount %56.2f\n", grandFinalTotalAmount);
-    }
-
-    /*----- Receipt -----*/
-    public static double calculateSubtotal(double subtotal, double amountToPay) {
-        subtotal += amountToPay;
-        return subtotal;
-    }
-
-    public static double calculateTax(double subtotal, double tax_rate) {
-        double taxCharge;
-        taxCharge = tax_rate * subtotal;
-        return taxCharge;
-    }
-
-    public static double calculateTotal(double subtotal, double taxCharge, double totalDiscount) {
-        double total;
-        total = subtotal + taxCharge - totalDiscount;
-        return total;
-    }
-
-    public static double calculateBalance(double payment, double total) {
-        double balance;
-        balance = payment - total;
-        return balance;
     }
 
     public static void main(String[] args) {

@@ -25,9 +25,6 @@ public class Receipt {
     private final static double TAX_RATE = 0.06;
     private static int orderID = 0;
     private double subtotal = 0.00;
-    private double tax = 0.00;
-    private double total = 0.00;
-    private double balance = 0.00;
 
     public Receipt() {
         orderID++;
@@ -38,7 +35,7 @@ public class Receipt {
     }
 
     public static void setTotalOrder(ArrayList<Order> totalOrder) {
-        Receipt.totalOrder=totalOrder;
+        Receipt.totalOrder = totalOrder;
     }
 
     public Discount getDiscount() {
@@ -81,33 +78,27 @@ public class Receipt {
         this.subtotal = subtotal;
     }
 
-    public double getTax() {
-        return tax;
+    public double calculateTax() {
+        double taxCharge;
+        taxCharge = TAX_RATE * subtotal;
+        return taxCharge;
     }
 
-    public void setTax(double tax) {
-        this.tax = tax;
-    }
-
-    public double getTotal() {
+    public double calculateTotal(double taxCharge, double totalDiscount) {
+        double total;
+        total = subtotal + taxCharge - totalDiscount;
         return total;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public double getBalance() {
+    public double calculateBalance(double payment, double total) {
+        double balance;
+        balance = payment - total;
         return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
     }
 
     @Override
     public String toString() {
-        return "\nDiscount: " + discount + "\nDateFormat: " + dateFormat + "\nTimeFormat: " + timeFormat + "\nDate: " + date + "\nTime: " + time + "\nSubtotal: " + subtotal + "\nTax: " + tax + "\nTotal: " + total + "\nBalance: " + balance;
+        return "\nDiscount: " + discount + "\nSubtotal: " + subtotal + "\nDateFormat: " + dateFormat + "\nTimeFormat: " + timeFormat + "\nDate: " + date + "\nTime: " + time;
     }
-    
+
 }
