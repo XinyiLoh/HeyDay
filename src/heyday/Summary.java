@@ -62,7 +62,7 @@ public class Summary {
         return newvcDiscount;
     }
 
-    public void setNewvcDiscount(double newvcDiscount) {
+    public void setNewvvcDiscount(double newvcDiscount) {
         this.newvcDiscount = newvcDiscount;
     }
 
@@ -74,10 +74,7 @@ public class Summary {
         this.productTotalAmount = productTotalAmount;
     }
     
-//    public int calculateTotalOrder(int totalOrder) {
-//        return totalOrder++;
-//    }
-//
+    //calculation of summary
     public double calculateSoldAmount(int sold, double amount) {
         newsoldAmount = sold * amount;
         return newsoldAmount;
