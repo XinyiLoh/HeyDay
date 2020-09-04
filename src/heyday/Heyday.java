@@ -215,10 +215,9 @@ public class Heyday {
 
             if (selectCat > cat.size() + 1) {
                 System.err.println("Invalid input...");
-            } else if(selectCat == 0 ){
-                 System.out.println("Quit...");
-            }
-            else{
+            } else if (selectCat == 0) {
+                System.out.println("Quit...");
+            } else {
                 System.out.println("\n=================================================================================");
                 System.out.println("                                P R O D U C T S");
                 System.out.println("=================================================================================");
@@ -387,8 +386,8 @@ public class Heyday {
             ArrayList<Order> orderedItem = new ArrayList<>(tempItem);
             tempItem.clear();
             Order.setOrderedDetails(orderedItem);
-            for (int i = 0; i < orderedItem.size(); i++) {
-                orders.add(orderedItem.get(i));
+            for (int i = 0; i < Order.getOrderedDetails().size(); i++) {
+                orders.add(Order.getOrderedDetails().get(i));
             }
             Receipt.setTotalOrder(orders);
 
@@ -426,14 +425,16 @@ public class Heyday {
 
             //----------------- Special Promotions ----------------- 
             //Cow+Sheep = 10% discount
-            for (int i = 0; i < orderedItem.size(); i++) {
+            for (int i = 0; i < Order.getOrderedDetails().size(); i++) {
                 if (cowSheepPurchased == false) {                       //run only one time
-                    if (orderedItem.get(i).getOrderedProd().getName().equals("Cow")) {
-                        for (int j = 0; j < orderedItem.size(); j++) {
-                            if (orderedItem.get(j).getOrderedProd().getName().equals("Sheep")) {
-                                cowSheepPurchased = true;
-                                specialdeals = true;
-                                System.out.println("\n Customer will get 10% discount purchasing cow(s) and sheep(s).");
+                    if (Order.getOrderedDetails().get(i).getOrderedProd().getName().equals("Cow")) {
+                        for (int j = 0; j < Order.getOrderedDetails().size(); j++) {
+                            if (cowSheepPurchased == false) {               //run only one time
+                                if (Order.getOrderedDetails().get(j).getOrderedProd().getName().equals("Sheep")) {
+                                    cowSheepPurchased = true;
+                                    specialdeals = true;
+                                    System.out.println("\n Customer will get 10% discount purchasing cow(s) and sheep(s).");
+                                }
                             }
                         }
                     }
@@ -441,10 +442,10 @@ public class Heyday {
             }
             //Product from Dairy and Field > $100 = 3 pounds of apples and 2 pounds of grapes
             if (cowSheepPurchased == false) {                   //customer is not allowed to receive more than one discount
-                for (int j = 0; j < orderedItem.size(); j++) {
+                for (int j = 0; j < Order.getOrderedDetails().size(); j++) {
                     if (freeItems == false) {                        //run only one time
                         for (int i = 0; i < product.size(); i++) {
-                            if (orderedItem.get(j).getOrderedProd().getId().equals(product.get(i).getId())) {
+                            if (Order.getOrderedDetails().get(j).getOrderedProd().getId().equals(product.get(i).getId())) {
                                 if (product.get(i).getSource().getName().equals("Dairy") || product.get(i).getSource().getName().equals("Field")) {     //Purchase Dairy or Field products with subtotal exceeds $100 will get free items
                                     if (subtotal > 100) {
                                         freeItems = true;
@@ -458,10 +459,10 @@ public class Heyday {
                 }
                 //Product from Flower and Orchard > $100 = 5% discount
                 if (freeItems == false) {
-                    for (int j = 0; j < orderedItem.size(); j++) {
+                    for (int j = 0; j < Order.getOrderedDetails().size(); j++) {
                         if (flowerOrchardPurchased == false) {                          //run only one time
                             for (int i = 0; i < product.size(); i++) {
-                                if (orderedItem.get(j).getOrderedProd().getId().equals(product.get(i).getId())) {
+                                if (Order.getOrderedDetails().get(j).getOrderedProd().getId().equals(product.get(i).getId())) {
                                     if (product.get(i).getSource().getName().equals("Flower") || product.get(i).getSource().getName().equals("Orchard")) {     //Purchase Flower or Orchard products with subtotal exceeds $100 will get 5% discount
                                         if (subtotal > 100) {
                                             flowerOrchardPurchased = true;
@@ -605,10 +606,10 @@ public class Heyday {
                 }
             } while (amountPaid < total);
 
-            for (int i = 0; i < orderedItem.size(); i++) {
+            for (int i = 0; i < Order.getOrderedDetails().size(); i++) {
                 for (int j = 0; j < product.size(); j++) {
-                    if (orderedItem.get(i).getOrderedProd().getId().equals(product.get(j).getId())) {
-                        product.get(j).decreaseStock(orderedItem.get(i).getOrderQty());
+                    if (Order.getOrderedDetails().get(i).getOrderedProd().getId().equals(product.get(j).getId())) {
+                        product.get(j).decreaseStock(Order.getOrderedDetails().get(i).getOrderQty());
                     }
                 }
             }
@@ -636,8 +637,8 @@ public class Heyday {
                 System.out.println(" ID\t\tItem Ordered\t\tUnit\t\tUnit Price\t\tAmount");
                 System.out.println(" =======================================================================================\n");
 
-                for (int i = 0; i < orderedItem.size(); i++) {
-                    System.out.printf(" %-14s %-20s %6d \t\t$%9.2f \t      $%8.2f\n", orderedItem.get(i).getOrderedProd().getId(), orderedItem.get(i).getOrderedProd().getName(), orderedItem.get(i).getOrderQty(), orderedItem.get(i).getOrderedProd().getPrice(), (orderedItem.get(i).getOrderQty() * orderedItem.get(i).getOrderedProd().getPrice()));
+                for (int i = 0; i < Order.getOrderedDetails().size(); i++) {
+                    System.out.printf(" %-14s %-20s %6d \t\t$%9.2f \t      $%8.2f\n", Order.getOrderedDetails().get(i).getOrderedProd().getId(), Order.getOrderedDetails().get(i).getOrderedProd().getName(), Order.getOrderedDetails().get(i).getOrderQty(), Order.getOrderedDetails().get(i).getOrderedProd().getPrice(), (Order.getOrderedDetails().get(i).getOrderQty() * Order.getOrderedDetails().get(i).getOrderedProd().getPrice()));
                 }
                 if (freeItems == true) {
                     System.out.printf(" O001 \t\tApples\t\t\t  3 \t\t\t\t\t  F.O.C\n");
@@ -1003,16 +1004,16 @@ public class Heyday {
 
         System.out.println("\t\t\t\t   DAILY SUMMARY");
         System.out.println("\t\t\t\t   -------------\n");
-        System.out.printf("Total Order : %-15d \t\t\t\tDate: %15s", Receipt.getOrderID(), summary.getDate());
+        System.out.printf("Total Order : %-15d \t\t\t    Date: %15s", Receipt.getOrderID(), summary.getDate());
         System.out.println("\n============================================================================");
-        System.out.print("Product ID \t\t Products \t\t Sold \t\t\t Amount");
+        System.out.print("Product ID \t\t Products\t       Sold\t\t     Amount");
         System.out.println("\n============================================================================");
         for (int i = 0; i < Receipt.getTotalOrder().size(); i++) {
             soldTotalAmount = 0;
             int soldTotalQty = 0;
             soldTotalAmount += summary.calculateSoldAmount(Receipt.getTotalOrder().get(i).getOrderQty(), Receipt.getTotalOrder().get(i).getOrderedProd().getPrice());
             soldTotalQty += Receipt.getTotalOrder().get(i).getOrderQty();
-            System.out.printf("%-25s%-22s%-15d%13.2f\n", Receipt.getTotalOrder().get(i).getOrderedProd().getId(), Receipt.getTotalOrder().get(i).getOrderedProd().getName(), soldTotalQty, soldTotalAmount);
+            System.out.printf("%-25s%-22s%1d%25.2f\n", Receipt.getTotalOrder().get(i).getOrderedProd().getId(), Receipt.getTotalOrder().get(i).getOrderedProd().getName(), soldTotalQty, soldTotalAmount);
         }
         System.out.println("============================================================================");
         System.out.printf("Total Amount %62.2f\n", summary.getNewSubtotal());
