@@ -1143,12 +1143,13 @@ public class Heyday {
                     System.out.println("===========================");
 
                     for (int i = 0; i < staff.size(); i++) {
+
                         if (staff.get(i) instanceof Manager) {
-                            System.out.println("\nManager");
+                            System.out.println((i + 1) + " Manager");
                         } else if (staff.get(i) instanceof Cashier) {
-                            System.out.println("\nCashier");
+                            System.out.println((i + 1) +  " Cashier");
                         }
-                        System.out.println((i + 1) + "\n" + staff.get(i).toString());
+                        System.out.println(staff.get(i).toString());
                     }
                     break;
                 default:
