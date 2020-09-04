@@ -113,9 +113,6 @@ public class Product {
         Product.totalProduct = totalProduct;
     }
 
-//    void discount(double percent){
-//        price = price * percent / 100.0;
-//    }
     public boolean increaseStock(int stock) {
         if (stock >= 0 && stock <= 9999) {
             this.stock += stock;
@@ -134,10 +131,6 @@ public class Product {
         }
     }
 
-//    public boolean equals(Object obj) {
-//        Product temp = (Product) obj;
-//        return (this.getId().equalsIgnoreCase(temp.getId()));
-//    }
     public String toString() {
         return String.format("%s %-8s %-13s $%-10.2f %-20s %-10d",
                 source.toString(), id, name, price, detail, stock);
