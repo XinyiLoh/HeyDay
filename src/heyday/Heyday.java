@@ -14,74 +14,85 @@ import java.util.InputMismatchException;
  * @author HeyDay
  */
 public class Heyday {
-    
+
     static Scanner scan = new Scanner(System.in);
     public static ArrayList<Order> tempItem = new ArrayList<>();
     public static ArrayList<Order> orders = new ArrayList<>();
     static Summary summary = new Summary();
-     
-    public static ArrayList<Category> cat = new ArrayList<Category>(){{
-        Category[] cat = new Category[]{
-            new Category('L', "Livestock"),
-            new Category('F', "Field"),
-            new Category('D', "Dairy"),
-            new Category('H', "Flower"),
-            new Category('O', "Orchard")
-        };
-        add(cat[0]);
-        add(cat[1]);
-        add(cat[2]);
-        add(cat[3]);
-        add(cat[4]);
-    }};
-    public static ArrayList<Product> product = new ArrayList<Product>(){{
-        Product[] prod = new Product[]{
 
-        new Product(cat.get(0), "L001", "Cow", 2000.00, "per head", 30),
-        new Product(cat.get(0), "L002", "Chicken", 1.51, "per kg", 80),
-        new Product(cat.get(0), "L003", "Sheep", 160.00, "per head", 50),
+    public static ArrayList<Category> cat = new ArrayList<Category>() {
+        {
+            Category[] cat = new Category[]{
+                new Category('L', "Livestock"),
+                new Category('F', "Field"),
+                new Category('D', "Dairy"),
+                new Category('H', "Flower"),
+                new Category('O', "Orchard")
+            };
+            add(cat[0]);
+            add(cat[1]);
+            add(cat[2]);
+            add(cat[3]);
+            add(cat[4]);
+        }
+    };
+    public static ArrayList<Product> product = new ArrayList<Product>() {
+        {
+            Product[] prod = new Product[]{
+                new Product(cat.get(0), "L001", "Cow", 2000.00, "per head", 30),
+                new Product(cat.get(0), "L002", "Chicken", 1.51, "per kg", 80),
+                new Product(cat.get(0), "L003", "Sheep", 160.00, "per head", 50),
+                new Product(cat.get(1), "F001", "Wheat", 4.56, "per bushel", 100),
+                new Product(cat.get(1), "F002", "Corn", 3.16, "per bushel", 100),
+                new Product(cat.get(1), "F003", "Soybeans", 8.14, "per bushel", 100),
+                new Product(cat.get(2), "D001", "Butter", 13.76, "per cwt", 100),
+                new Product(cat.get(2), "D002", "Milk", 13.79, "per cwt", 100),
+                new Product(cat.get(2), "D003", "Cheese", 24.54, "per cwt", 100),
+                new Product(cat.get(3), "H001", "Sunflowers", 17.75, "per 10 stem bunch", 100),
+                new Product(cat.get(3), "H002", "Buttercup", 14.75, "per 10 stem bunch", 100),
+                new Product(cat.get(3), "H003", "Loosestrife", 8.50, "per 10 stem bunch", 100),
+                new Product(cat.get(4), "O001", "Apples", 1.00, "per pound", 100),
+                new Product(cat.get(4), "O002", "Cherries", 5.00, "per pound", 100),
+                new Product(cat.get(4), "O003", "Grapes", 0.60, "per pound", 100)
 
-        new Product(cat.get(1), "F001", "Wheat", 4.56, "per bushel", 100),
-        new Product(cat.get(1), "F002", "Corn", 3.16, "per bushel", 100),
-        new Product(cat.get(1), "F003", "Soybeans", 8.14, "per bushel", 100),
+            };
 
-        new Product(cat.get(2), "D001", "Butter", 13.76, "per cwt", 100),
-        new Product(cat.get(2), "D002", "Milk", 13.79, "per cwt", 100),
-        new Product(cat.get(2), "D003", "Cheese", 24.54, "per cwt", 100),
+            add(prod[0]);
+            add(prod[1]);
+            add(prod[2]);
+            add(prod[3]);
+            add(prod[4]);
+            add(prod[5]);
+            add(prod[6]);
+            add(prod[7]);
+            add(prod[8]);
+            add(prod[9]);
+            add(prod[10]);
+            add(prod[11]);
+            add(prod[12]);
+            add(prod[13]);
+            add(prod[14]);
+        }
+    };
+    public static ArrayList<User> staff = new ArrayList<User>() {
+        {
 
-        new Product(cat.get(3), "H001", "Sunflowers", 17.75, "per 10 stem bunch", 100),
-        new Product(cat.get(3), "H002", "Buttercup", 14.75, "per 10 stem bunch", 100),
-        new Product(cat.get(3), "H003", "Loosestrife", 8.50, "per 10 stem bunch", 100),
+            User[] employee = {
+                new Manager("xinying", "xinying", 'F', "010-0000000"),
+                new Cashier("junyan", "junyan", 'M', "011-1111111"),
+                new Cashier("huihui", "huihui", 'F', "012-2222222"),
+                new Cashier("xinyi", "xinyi", 'F', "013-3333333")
+            };
 
-        new Product(cat.get(4),  "O001", "Apples", 1.00, "per pound", 100),
-        new Product(cat.get(4), "O002", "Cherries", 5.00, "per pound", 100),
-        new Product(cat.get(4), "O003", "Grapes", 0.60, "per pound", 100)
+            add(employee[0]);
+            add(employee[1]);
+            add(employee[2]);
+            add(employee[3]);
+        }
+    };
 
-        };
-    
-        add(prod[0]);add(prod[1]);add(prod[2]);
-        add(prod[3]);add(prod[4]);add(prod[5]);
-        add(prod[6]);add(prod[7]);add(prod[8]);
-        add(prod[9]);add(prod[10]);add(prod[11]);
-        add(prod[12]);add(prod[13]);add(prod[14]);
-    }};
-    public static ArrayList<User> staff = new ArrayList<User>(){{
+    public static User login() {
 
-        User[] employee = {
-            new Manager("xinying", "xinying", 'F', "010-0000000"),
-            new Cashier("junyan", "junyan", 'M', "011-1111111"),
-            new Cashier("huihui", "huihui", 'F', "012-2222222"),
-            new Cashier("xinyi", "xinyi", 'F', "013-3333333")
-        };
-        
-        add(employee[0]);
-        add(employee[1]);
-        add(employee[2]);
-        add(employee[3]);
-    }};
-    
-    public static User login(){
- 
         System.out.println("----------------------------------------------------------------------------------------");
         System.out.println("........................................................................................");
         System.out.println("    ////    ////   ////////  /////  /////   ////////          //////     /////  /////  ");
@@ -129,11 +140,12 @@ public class Heyday {
             }
 
         } while (login == false);
-        
+
         return staff.get(staffNo);
-    } 
-    public static int mainMenu(User onDutyStaff){
-        
+    }
+
+    public static int mainMenu(User onDutyStaff) {
+
         int selection = 7;
         boolean menu = false;
 
@@ -174,32 +186,32 @@ public class Heyday {
         }
         return selection;
     }
-    
+
     public static void displayProducts() {
-        
+
         int selectCat = 8;
-        do{
-                System.out.println("\n=========================");
-                System.out.println("== C A T E G O R I E S ==");
-                System.out.println("=========================");
-                System.out.println("1. All              ");
+        do {
+            System.out.println("\n=========================");
+            System.out.println("== C A T E G O R I E S ==");
+            System.out.println("=========================");
+            System.out.println("1. All              ");
 
-                for (int i = 0; i < cat.size(); i++) {
-                    System.out.println((i + 2) + ". " + cat.get(i).getName());
-                }
+            for (int i = 0; i < cat.size(); i++) {
+                System.out.println((i + 2) + ". " + cat.get(i).getName());
+            }
 
-                System.out.println("0. Quit             ");
-                System.out.println("=========================");
-                System.out.println("Total Products = " + Product.getTotalProduct());
-                System.out.println("=========================");
-                System.out.print("Enter choice > ");
-                
-                try {
-                    selectCat = scan.nextInt();
-                } catch (InputMismatchException a) {
-                    System.err.print("Must enter a number. ");
-                    scan.next();
-                }
+            System.out.println("0. Quit             ");
+            System.out.println("=========================");
+            System.out.println("Total Products = " + Product.getTotalProduct());
+            System.out.println("=========================");
+            System.out.print("Enter choice > ");
+
+            try {
+                selectCat = scan.nextInt();
+            } catch (InputMismatchException a) {
+                System.err.print("Must enter a number. ");
+                scan.next();
+            }
 
             if (selectCat > cat.size() + 1) {
                 System.err.println("Invalid input...");
@@ -225,7 +237,7 @@ public class Heyday {
                     case 8:
                         int count = 0;
                         for (int i = 0; i < product.size(); i++) {
-                            if (cat.get(selectCat - 2) == product.get(i).getSource()){
+                            if (cat.get(selectCat - 2) == product.get(i).getSource()) {
                                 System.out.println(product.get(i).toString());
                                 count++;
                             }
@@ -241,12 +253,13 @@ public class Heyday {
             }
         } while (selectCat != 0);
     }
-    public static double orderProducts(){
-        
+
+    public static double orderProducts() {
+
         String orderProductID;
         int orderStockQty = 0;
         char continueAddOrder;
-        
+
         double prodAmount = 0;
 
         int index = 0;
@@ -332,13 +345,14 @@ public class Heyday {
                 }
             } while (continueAddOrder != 'n' && continueAddOrder != 'N' && continueAddOrder != 'y' && continueAddOrder != 'Y');
         } while (continueAddOrder == 'y' || continueAddOrder == 'Y');
-        
+
         return prodAmount;
     }
-    public static void receipt(double prodAmount,User onDutyStaff){
-        
+
+    public static void receipt(double prodAmount, User onDutyStaff) {
+
         ArrayList<String> usedVc = new ArrayList<>();
-        
+
         //--Receipt--//
         double subtotal;
         double amountPaid = 0;
@@ -348,7 +362,7 @@ public class Heyday {
         double vcDiscount = 0;
         double sdDiscount = 0;
         double totalDiscount;
-        
+
         char continuePayment;
 
         do {
@@ -364,6 +378,7 @@ public class Heyday {
             System.err.println("\nOrder is cancelled...\n");
             tempItem.clear();
         } else if (continuePayment == 'Y' || continuePayment == 'y') {
+
             Receipt receipt = new Receipt();
 
             ArrayList<Order> orderedItem = new ArrayList<>(tempItem);
@@ -400,7 +415,8 @@ public class Heyday {
             boolean freeItems = false;
             boolean flowerOrchardPurchased = false;
 
-            subtotal = calculateSubtotal(receipt.getSubtotal(), prodAmount);
+            receipt.setSubtotal(prodAmount);
+            subtotal = receipt.getSubtotal();
 
             //For Summary 
             summary.calculateAmount(subtotal);
@@ -558,8 +574,8 @@ public class Heyday {
             }
 
             //Information are shown before input amount paid by the customers
-            taxCharge = calculateTax(subtotal, Receipt.getTAX_RATE());
-            total = calculateTotal(subtotal, taxCharge, totalDiscount);
+            taxCharge = receipt.calculateTax();
+            total = receipt.calculateTotal(taxCharge, totalDiscount);
 
             System.out.printf("\n Subtotal: \t\t$%9.2f\n", subtotal);
             if (vcCount > 0) {
@@ -574,7 +590,7 @@ public class Heyday {
                 try {
                     System.out.print(" Amount Paid: \t\t$  ");
                     amountPaid = scan.nextDouble();
-                    balance = calculateBalance(amountPaid, total);
+                    balance = receipt.calculateBalance(amountPaid, total);
                     if (amountPaid >= total) {
                         System.out.printf(" Change: \t\t$%9.2f\n", balance);
                     } else {
@@ -647,6 +663,7 @@ public class Heyday {
             orderedItem.clear();
         }
     }
+
     public static void addNewCategory() {
 
         char code;
@@ -658,8 +675,8 @@ public class Heyday {
         title = scan.next();
 
         int error = 0;
-        
-        if(Character.isLetter(code) == false){
+
+        if (Character.isLetter(code) == false) {
             System.err.println("\"" + code + "\"" + " Code must be in letter.");
             error++;
         }
@@ -679,19 +696,20 @@ public class Heyday {
                 error++;
             }
         }
-        
+
         if (error == 0) {
             Category newCat = new Category(code, title);
             cat.add(newCat);
-            System.out.println("New Category Added ! --> " + cat.get(cat.size()-1).toString() + "\n");
+            System.out.println("New Category Added ! --> " + cat.get(cat.size() - 1).toString() + "\n");
         }
-   
+
     }
+
     public static void addNewProduct() {
-        
+
         int error = 0;
         int temp = 0;
-        do{
+        do {
             System.out.println("\n------------------------------------------------------------------------------------");
             for (int i = 0; i < cat.size(); i++) {
                 System.out.print("| " + (i + 1) + ". " + cat.get(i).getName() + " |");
@@ -708,36 +726,36 @@ public class Heyday {
                 scan.next();
             }
 
-            if(temp < 1 || temp > cat.size()){
+            if (temp < 1 || temp > cat.size()) {
                 System.err.println("Invalid input.");
             }
-            
-        }while(temp < 1 || temp > cat.size());
-        
-        if(temp >= 1 && temp <= cat.size()){
+
+        } while (temp < 1 || temp > cat.size());
+
+        if (temp >= 1 && temp <= cat.size()) {
             //Input Product ID
             System.out.print("Product ID > ");
             String prodID = scan.nextLine();
-            
-            if(prodID.matches("^\\w{1}\\d{3}$") == false){
+
+            if (prodID.matches("^\\w{1}\\d{3}$") == false) {
                 System.err.println("\"" + prodID + "\"" + " ID is in wrong format.");
                 System.err.println("Example of Correct ID Format: Category Code + Sequence Numbers ->" + cat.get(temp - 1).getCode() + "001");
                 error++;
-            }else if(Character.toUpperCase(prodID.charAt(0)) != cat.get(temp - 1).getCode()){
+            } else if (Character.toUpperCase(prodID.charAt(0)) != cat.get(temp - 1).getCode()) {
                 System.err.println("Category Code unmatched.");
                 error++;
             }
-            
+
             //Input Product Name
             System.out.print("Name > ");
             String prodName = scan.nextLine();
-            
-            if(prodName.matches("^\\w{2,15}$") == false){
+
+            if (prodName.matches("^\\w{2,15}$") == false) {
                 System.err.println("\"" + prodName + "\"" + " Name should only contains min 2 to max 15 letters.");
                 error++;
             }
-            
-               //check duplicate id and name
+
+            //check duplicate id and name
             for (int i = 0; i < product.size(); i++) {
 
                 if (product.get(i).getId().equalsIgnoreCase(prodID)) {
@@ -750,11 +768,11 @@ public class Heyday {
                     error++;
                 }
             }
-            
+
             //Input Product Price
             System.out.print("Price > ");
-            double prodPrice = -1 ;
-            
+            double prodPrice = -1;
+
             try {
                 prodPrice = scan.nextDouble();
                 scan.nextLine();
@@ -764,22 +782,22 @@ public class Heyday {
                 error++;
             }
 
-              //check price
+            //check price
             if (prodPrice <= 0.0 || prodPrice >= 9999.99) {
                 System.err.println("\"" + prodPrice + "\"" + " Price is out of range.");
                 error++;
             }
-            
+
             //Input Product Detail
             System.out.print("Detail > ");
             String prodDetail = scan.nextLine();
-            
-             //check detail length
+
+            //check detail length
             if (prodDetail.length() < 2 || prodDetail.length() > 20) {
                 System.err.println("\"" + prodDetail + "\"" + " Detail length should only contains min 2 to max 20 letters.");
                 error++;
             }
-            
+
             System.out.print("Stock > ");
             int prodStock = 0;
 
@@ -801,14 +819,15 @@ public class Heyday {
             if (error == 0) {
                 Product prod = new Product(cat.get(temp - 1), prodID, prodName, prodPrice, prodDetail, prodStock);
                 product.add(prod);
-                System.out.println("New Product Added ! --> " + product.get(product.size()-1).toString() + "\n");
+                System.out.println("New Product Added ! --> " + product.get(product.size() - 1).toString() + "\n");
                 error++;
-            }else{
+            } else {
                 System.out.println("Please try again with correct information.");
-            }    
+            }
         }
     }
-    public static void stockCheck(){
+
+    public static void stockCheck() {
         int chkStock = 0;
         do {
             System.out.println("\n1. By product ID");
@@ -854,14 +873,14 @@ public class Heyday {
 
                     System.out.print("\nEnter choice > ");
                     int catStock = 0;
-                    
+
                     try {
                         catStock = scan.nextInt();
                     } catch (InputMismatchException a) {
                         System.err.print("Must enter a number. ");
                         scan.next();
                     }
-                              
+
                     if (catStock > 0 && catStock <= cat.size()) {
 
                         System.out.println("\nS T O C K in " + cat.get(catStock - 1).getName());
@@ -883,7 +902,7 @@ public class Heyday {
                 case 3:
                     System.out.print("Enter minimum stock quantity > ");
                     int minStock = 0;
-                    
+
                     try {
                         minStock = scan.nextInt();
                         scan.nextLine();
@@ -891,10 +910,10 @@ public class Heyday {
                         System.err.println("Must enter a number.");
                         scan.next();
                     }
-                    
+
                     System.out.print("Enter maximum stock quantity > ");
                     int maxStock = 0;
-                    
+
                     try {
                         maxStock = scan.nextInt();
                         scan.nextLine();
@@ -922,8 +941,9 @@ public class Heyday {
             }
         } while (chkStock >= 1 && chkStock <= 3);
     }
-    public static void stockControl(int stockManage){
-        
+
+    public static void stockControl(int stockManage) {
+
         int find = 0;
         int found = 0;
         while (find == 0 && found == 0) {
@@ -938,7 +958,7 @@ public class Heyday {
 
                     System.out.print("Enter amount > ");
                     int stockInOut = 0;
-                    
+
                     try {
                         stockInOut = scan.nextInt();
                         scan.nextLine();
@@ -946,8 +966,8 @@ public class Heyday {
                         System.err.println("Must enter a number ");
                         scan.next();
                     }
-                     
-                    if(stockInOut > 0){
+
+                    if (stockInOut > 0) {
                         if (stockManage == 2) {
                             product.get(i).increaseStock(stockInOut);
                             System.out.println("Stock increased !");
@@ -971,8 +991,9 @@ public class Heyday {
             }
         }
     }
-     public static void heydaySummary(){
-        
+
+    public static void heydaySummary() {
+
         double soldTotalAmount;
         double grandFinalTotalAmount;
         grandFinalTotalAmount = summary.calculateFinalTotalAmount(summary.getNewSubtotal(), summary.getNewsdDiscount(), summary.getNewvcDiscount());
@@ -980,42 +1001,21 @@ public class Heyday {
         System.out.println("\t\t\t\t   DAILY SUMMARY");
         System.out.println("\t\t\t\t   -------------\n");
         System.out.printf("Total Order : %-15d \t\t\t\tDate: %15s", Receipt.getOrderID(), summary.getDate());
-        System.out.println("\n===============================================================================");
-        System.out.print("Product ID\t\tProducts\t\tSold\t\t\tAmount");
-        System.out.println("\n===============================================================================");
+        System.out.println("\n============================================================================");
+        System.out.print("Product ID \t\t Products \t\t Sold \t\t\t Amount");
+        System.out.println("\n============================================================================");
         for (int i = 0; i < Receipt.getTotalOrder().size(); i++) {
             soldTotalAmount = 0;
             int soldTotalQty = 0;
             soldTotalAmount += summary.calculateSoldAmount(Receipt.getTotalOrder().get(i).getOrderQty(), Receipt.getTotalOrder().get(i).getOrderedProd().getPrice());
             soldTotalQty += Receipt.getTotalOrder().get(i).getOrderQty();
-            System.out.printf("%-23s%4s%25d \t%22.2f\n", Receipt.getTotalOrder().get(i).getOrderedProd().getId(), Receipt.getTotalOrder().get(i).getOrderedProd().getName(), soldTotalQty, soldTotalAmount);
+            System.out.printf("%-25s%-22s%-15d%13.2f\n", Receipt.getTotalOrder().get(i).getOrderedProd().getId(), Receipt.getTotalOrder().get(i).getOrderedProd().getName(), soldTotalQty, soldTotalAmount);
         }
-        System.out.println("===============================================================================");
-        System.out.printf("Total Amount $%65.2f\n", summary.getNewSubtotal());
-        System.out.printf("Total Discount $%63.2f\n", summary.getNewsdDiscount());
-        System.out.printf("Total Voucher Amount $%57.2f\n", summary.getNewvcDiscount());
-        System.out.printf("Final Total Amount $%59.2f\n", grandFinalTotalAmount);
-    }
-
-    /*----- Receipt -----*/
-    public static double calculateSubtotal(double subtotal, double amountToPay) {
-        subtotal += amountToPay;
-        return subtotal;
-    }
-    public static double calculateTax(double subtotal, double tax_rate) {
-        double taxCharge;
-        taxCharge = tax_rate * subtotal;
-        return taxCharge;
-    }
-    public static double calculateTotal(double subtotal, double taxCharge, double totalDiscount) {
-        double total;
-        total = subtotal + taxCharge - totalDiscount;
-        return total;
-    }
-    public static double calculateBalance(double payment, double total) {
-        double balance;
-        balance = payment - total;
-        return balance;
+        System.out.println("============================================================================");
+        System.out.printf("Total Amount %62.2f\n", summary.getNewSubtotal());
+        System.out.printf("Total Discount %60.2f\n", summary.getNewsdDiscount());
+        System.out.printf("Total Voucher Amount %54.2f\n", summary.getNewvcDiscount());
+        System.out.printf("Final Total Amount %56.2f\n", grandFinalTotalAmount);
     }
 
     public static void main(String[] args) {
@@ -1026,9 +1026,9 @@ public class Heyday {
         int selection = 7;
         do {
             selection = mainMenu(onDutyStaff);
-            
+
             switch (selection) {
-                
+
                 case 0://Log out
                     char out;
                     do {
@@ -1043,18 +1043,18 @@ public class Heyday {
                         }
                     } while (out != 'y' && out != 'Y' && out != 'n' && out != 'N');
                     break;
-                    
+
                 case 1://Display products
                     displayProducts();
                     break;
-                    
+
                 case 2:
                     System.out.println("\n===========================");
                     System.out.println("=    O R D E R Product    =");
                     System.out.println("===========================");
-                    
+
                     double prodAmount = orderProducts();
-                    receipt(prodAmount,onDutyStaff);
+                    receipt(prodAmount, onDutyStaff);
                     break;
 
                 case 3://Add new Category or new Product
@@ -1068,22 +1068,25 @@ public class Heyday {
                         System.out.println("2. New Product");
                         System.out.println("3. Quit");
                         System.out.print("Enter choice > ");
-                        
-                        try{
+
+                        try {
                             addnew = scan.nextInt();
                             scan.nextLine();
-                        }catch(InputMismatchException a){
+                        } catch (InputMismatchException a) {
                             System.err.print("Must enter a number. ");
                             scan.next();
                         }
-                        
+
                         switch (addnew) {
                             case 1://Add new Category
-                                addNewCategory();break;
+                                addNewCategory();
+                                break;
                             case 2://Add new Product
-                                addNewProduct();break;
+                                addNewProduct();
+                                break;
                             case 3:
-                                System.out.println("Quit...");break;
+                                System.out.println("Quit...");
+                                break;
                             default:
                                 System.err.println("Invalid Input...");
                         }
@@ -1101,22 +1104,25 @@ public class Heyday {
                         System.out.println("3. Decrease Stock");
                         System.out.println("4. Quit");
                         System.out.print("Enter choice > ");
-                        
-                        try{
+
+                        try {
                             stockManage = scan.nextInt();
-                        }catch(InputMismatchException a){
+                        } catch (InputMismatchException a) {
                             System.err.print("Must enter a number. ");
                             scan.next();
                         }
-                        
+
                         switch (stockManage) {
                             case 1: //Stock check
-                                stockCheck();break;
+                                stockCheck();
+                                break;
                             case 2:
                             case 3: //Stock control
-                                stockControl(stockManage);break;
+                                stockControl(stockManage);
+                                break;
                             case 4:
-                                System.out.println("Quit..");break;
+                                System.out.println("Quit..");
+                                break;
                             default:
                                 System.err.println("Invalid input...");
                         }
