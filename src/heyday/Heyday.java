@@ -215,7 +215,10 @@ public class Heyday {
 
             if (selectCat > cat.size() + 1) {
                 System.err.println("Invalid input...");
-            } else {
+            } else if(selectCat == 0 ){
+                 System.out.println("Quit...");
+            }
+            else{
                 System.out.println("\n=================================================================================");
                 System.out.println("                                P R O D U C T S");
                 System.out.println("=================================================================================");

@@ -34,7 +34,6 @@ public class Order {
         Order.orderedDetails = orderedDetails;
     }
 
-
     public void setOrderQty(int orderQty) {
         this.orderQty = orderQty;
     }
