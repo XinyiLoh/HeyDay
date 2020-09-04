@@ -61,3 +61,18 @@ public class User {
     }
 }
 
+class Manager extends User {
+
+    public Manager(String username, String password, char gender, String phoneNo) {
+        super(username, password, gender, phoneNo);
+    }
+
+}
+
+class Cashier extends User {
+
+    public Cashier(String username, String password, char gender, String phoneNo) {
+        super(username, password, gender, phoneNo);
+    }
+
+}
